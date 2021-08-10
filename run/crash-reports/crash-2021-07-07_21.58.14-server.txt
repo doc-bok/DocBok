@@ -1,0 +1,149 @@
+---- Minecraft Crash Report ----
+// I let you down. Sorry :(
+
+Time: 07/07/21 21:58
+Description: Ticking entity
+
+java.lang.NullPointerException: Ticking entity
+	at com.bokmcdok.fauna.goals.WanderGoal.startExecuting(WanderGoal.java:54) ~[?:?] {re:classloading}
+	at net.minecraft.entity.ai.goal.PrioritizedGoal.startExecuting(PrioritizedGoal.java:45) ~[?:?] {re:classloading}
+	at net.minecraft.entity.ai.goal.GoalSelector.lambda$tick$9(GoalSelector.java:87) ~[?:?] {re:classloading}
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184) ~[?:1.8.0_201] {}
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175) ~[?:1.8.0_201] {}
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175) ~[?:1.8.0_201] {}
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175) ~[?:1.8.0_201] {}
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175) ~[?:1.8.0_201] {}
+	at java.util.Iterator.forEachRemaining(Iterator.java:116) ~[?:1.8.0_201] {}
+	at java.util.Spliterators$IteratorSpliterator.forEachRemaining(Spliterators.java:1801) ~[?:1.8.0_201] {}
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481) ~[?:1.8.0_201] {}
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471) ~[?:1.8.0_201] {}
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151) ~[?:1.8.0_201] {}
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174) ~[?:1.8.0_201] {}
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234) ~[?:1.8.0_201] {}
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418) ~[?:1.8.0_201] {}
+	at net.minecraft.entity.ai.goal.GoalSelector.tick(GoalSelector.java:81) ~[?:?] {re:classloading}
+	at net.minecraft.entity.MobEntity.updateEntityActionState(MobEntity.java:738) ~[?:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.entity.LivingEntity.livingTick(LivingEntity.java:2561) ~[?:?] {re:classloading}
+	at net.minecraft.entity.MobEntity.livingTick(MobEntity.java:537) ~[?:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.entity.AgeableEntity.livingTick(AgeableEntity.java:138) ~[?:?] {re:classloading}
+	at net.minecraft.entity.passive.AnimalEntity.livingTick(AnimalEntity.java:54) ~[?:?] {re:classloading}
+	at com.bokmcdok.fauna.objects.entity.NyanCatEntity.livingTick(NyanCatEntity.java:153) ~[?:?] {re:classloading}
+	at net.minecraft.entity.LivingEntity.tick(LivingEntity.java:2304) ~[?:?] {re:classloading}
+	at net.minecraft.entity.MobEntity.tick(MobEntity.java:336) ~[?:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.entity.passive.CatEntity.tick(CatEntity.java:270) ~[?:?] {re:classloading}
+	at net.minecraft.world.server.ServerWorld.updateEntity(ServerWorld.java:616) ~[?:?] {re:classloading}
+	at net.minecraft.world.World.guardEntityTick(World.java:643) ~[?:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.world.server.ServerWorld.tick(ServerWorld.java:400) ~[?:?] {re:classloading}
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:886) ~[?:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:822) ~[?:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:87) ~[?:?] {re:classloading,pl:runtimedistcleaner:A}
+	at net.minecraft.server.MinecraftServer.func_240802_v_(MinecraftServer.java:665) ~[?:?] {re:classloading,pl:accesstransformer:B}
+	at net.minecraft.server.MinecraftServer.lambda$func_240784_a_$0(MinecraftServer.java:231) ~[?:?] {re:classloading,pl:accesstransformer:B}
+	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_201] {}
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Server thread
+Stacktrace:
+	at com.bokmcdok.fauna.goals.WanderGoal.startExecuting(WanderGoal.java:54)
+	at net.minecraft.entity.ai.goal.PrioritizedGoal.startExecuting(PrioritizedGoal.java:45)
+	at net.minecraft.entity.ai.goal.GoalSelector.lambda$tick$9(GoalSelector.java:87)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:184)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:175)
+	at java.util.Iterator.forEachRemaining(Iterator.java:116)
+	at java.util.Spliterators$IteratorSpliterator.forEachRemaining(Spliterators.java:1801)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:481)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:471)
+	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:151)
+	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:174)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:418)
+	at net.minecraft.entity.ai.goal.GoalSelector.tick(GoalSelector.java:81)
+	at net.minecraft.entity.MobEntity.updateEntityActionState(MobEntity.java:738)
+	at net.minecraft.entity.LivingEntity.livingTick(LivingEntity.java:2561)
+	at net.minecraft.entity.MobEntity.livingTick(MobEntity.java:537)
+	at net.minecraft.entity.AgeableEntity.livingTick(AgeableEntity.java:138)
+	at net.minecraft.entity.passive.AnimalEntity.livingTick(AnimalEntity.java:54)
+	at com.bokmcdok.fauna.objects.entity.NyanCatEntity.livingTick(NyanCatEntity.java:153)
+	at net.minecraft.entity.LivingEntity.tick(LivingEntity.java:2304)
+	at net.minecraft.entity.MobEntity.tick(MobEntity.java:336)
+	at net.minecraft.entity.passive.CatEntity.tick(CatEntity.java:270)
+	at net.minecraft.world.server.ServerWorld.updateEntity(ServerWorld.java:616)
+
+-- Entity being ticked --
+Details:
+	Entity Type: fauna:nyan_cat (com.bokmcdok.fauna.objects.entity.NyanCatEntity)
+	Entity ID: 16
+	Entity Name: Nyan
+	Entity's Exact location: -211.70, 91.76, -1.93
+	Entity's Block location: World: (-212,91,-2), Chunk: (at 12,5,14 in -14,-1; contains blocks -224,0,-16 to -209,255,-1), Region: (-1,-1; contains chunks -32,-32 to -1,-1, blocks -512,0,-512 to -1,255,-1)
+	Entity's Momentum: 0.00, 0.00, 0.00
+	Entity's Passengers: []
+	Entity's Vehicle: ~~ERROR~~ NullPointerException: null
+Stacktrace:
+	at net.minecraft.world.World.guardEntityTick(World.java:643)
+	at net.minecraft.world.server.ServerWorld.tick(ServerWorld.java:400)
+
+-- Affected level --
+Details:
+	All players: 0 total; []
+	Chunk stats: ServerChunkCache: 2094
+	Level dimension: minecraft:overworld
+	Level spawn location: World: (-224,64,-64), Chunk: (at 0,4,0 in -14,-4; contains blocks -224,0,-64 to -209,255,-49), Region: (-1,-1; contains chunks -32,-32 to -1,-1, blocks -512,0,-512 to -1,255,-1)
+	Level time: 15002 game time, 3022 day time
+	Level name: New World
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: true
+	Level weather: Rain time: 53370 (now: false), thunder time: 9255 (now: false)
+	Known server brands: forge
+	Level was modded: true
+	Level storage version: 0x04ABD - Anvil
+Stacktrace:
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:886)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:822)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:87)
+	at net.minecraft.server.MinecraftServer.func_240802_v_(MinecraftServer.java:665)
+	at net.minecraft.server.MinecraftServer.lambda$func_240784_a_$0(MinecraftServer.java:231)
+	at java.lang.Thread.run(Thread.java:748)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.16.1
+	Minecraft Version ID: 1.16.1
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_201, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 472572248 bytes (450 MB) / 1184366592 bytes (1129 MB) up to 1881145344 bytes (1794 MB)
+	CPUs: 8
+	JVM Flags: 1 total; -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump
+	ModLauncher: 6.1.3+75+master.851120a
+	ModLauncher launch target: fmluserdevclient
+	ModLauncher naming: mcp
+	ModLauncher services: 
+		/mixin-0.8.jar mixin PLUGINSERVICE 
+		/eventbus-3.0.3-service.jar eventbus PLUGINSERVICE 
+		/forge-1.16.1-32.0.108_mapped_snapshot_20200514-1.16-launcher.jar object_holder_definalize PLUGINSERVICE 
+		/forge-1.16.1-32.0.108_mapped_snapshot_20200514-1.16-launcher.jar runtime_enum_extender PLUGINSERVICE 
+		/accesstransformers-2.2.0-shadowed.jar accesstransformer PLUGINSERVICE 
+		/forge-1.16.1-32.0.108_mapped_snapshot_20200514-1.16-launcher.jar capability_inject_definalize PLUGINSERVICE 
+		/forge-1.16.1-32.0.108_mapped_snapshot_20200514-1.16-launcher.jar runtimedistcleaner PLUGINSERVICE 
+		/mixin-0.8.jar mixin TRANSFORMATIONSERVICE 
+		/forge-1.16.1-32.0.108_mapped_snapshot_20200514-1.16-launcher.jar fml TRANSFORMATIONSERVICE 
+	FML: 32.0
+	Forge: net.minecraftforge:32.0.108
+	FML Language Providers: 
+		javafml@32.0
+		minecraft@1
+	Mod List: 
+		client-extra.jar Minecraft {minecraft@1.16.1 DONE}
+		resources Data Mod {data@NONE DONE, fauna@NONE DONE}
+		forge-1.16.1-32.0.108_mapped_snapshot_20200514-1.16-recomp.jar Forge {forge@32.0.108 DONE}
+	Player Count: 0 / 8; []
+	Data Packs: vanilla, mod:data, mod:forge
+	Type: Integrated Server (map_client.txt)
+	Is Modded: Definitely; Client brand changed to 'forge'
