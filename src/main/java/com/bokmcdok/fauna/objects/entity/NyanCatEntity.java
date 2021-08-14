@@ -1,23 +1,22 @@
 package com.bokmcdok.fauna.objects.entity;
 
 import com.bokmcdok.fauna.FaunaMod;
-import com.bokmcdok.fauna.lists.AttributeList;
 import com.bokmcdok.fauna.lists.ParticleList;
 import com.bokmcdok.fauna.lists.SoundEventList;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ILivingEntityData;
-import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.controller.FlyingMovementController;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
+import com.mojang.math.Vector3d;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,7 +24,7 @@ import javax.annotation.Nullable;
 /**
  * Nyan Cat in Minecraft!
  */
-public class NyanCatEntity extends CatEntity {
+public class NyanCatEntity extends Cat {
 
     //  This is the name we will use to reference the Nyan Cat
     public static final String NAME = "nyan_cat";
@@ -39,9 +38,9 @@ public class NyanCatEntity extends CatEntity {
      * @param type The Entity Type for the cat.
      * @param world The current world.
      */
-    public NyanCatEntity(EntityType<? extends NyanCatEntity> type, World world) {
+    public NyanCatEntity(EntityType<? extends NyanCatEntity> type, Level world) {
         super(type, world);
-        moveController = new FlyingMovementController(this, 20, true);
+        this.moveControl = new FlyingMoveControl(this, 20, true);
     }
 
     /**
@@ -55,84 +54,84 @@ public class NyanCatEntity extends CatEntity {
      */
     @Nullable
     @Override
-    public ILivingEntityData onInitialSpawn(@Nonnull IWorld world,
-                                            @Nonnull DifficultyInstance difficulty,
-                                            @Nonnull SpawnReason reason,
-                                            @Nullable ILivingEntityData spawnData,
-                                            @Nullable CompoundNBT dataTag) {
+    public SpawnGroupData finalizeSpawn(@Nonnull ServerLevelAccessor world,
+                                        @Nonnull DifficultyInstance difficulty,
+                                        @Nonnull MobSpawnType reason,
+                                        @Nullable SpawnGroupData spawnData,
+                                        @Nullable CompoundTag dataTag) {
 
-        if (reason == SpawnReason.CONVERSION) {
+        if (reason == MobSpawnType.CONVERSION) {
             playSound(SoundEventList.NYAN_CAT_MUSIC.get(), 0.5f, 1.0f);
         }
 
-        return super.onInitialSpawn(world, difficulty, reason, spawnData , dataTag);
+        return super.finalizeSpawn(world, difficulty, reason, spawnData , dataTag);
     }
 
     /**
      * Spawn rainbow particles for the Nyan Cat!
      */
     @Override
-    public void livingTick() {
-        if (world.isRemote) {
+    public void aiStep() {
+        if (level.isClientSide()) {
             Vector3d lookVector = lookVector();
-            world.addParticle(ParticleList.RED_RAINBOW_PARTICLE.get(),
-                    lastTickPosX - (lookVector.x * 0.5),
-                    lastTickPosY + 0.7f,
-                    lastTickPosZ - (lookVector.z * 0.5),
-                    (getPosX() - lastTickPosX - lookVector.x) * 50f,
+            level.addParticle(ParticleList.RED_RAINBOW_PARTICLE.get(),
+                    xOld - (lookVector.x * 0.5),
+                    yOld + 0.7f,
+                    zOld - (lookVector.z * 0.5),
+                    (getX() - xOld - lookVector.x) * 50f,
                     0f,
-                    (getPosZ() - lastTickPosZ - lookVector.z) * 50f);
+                    (getZ() - zOld - lookVector.z) * 50f);
 
-            world.addParticle(ParticleList.ORANGE_RAINBOW_PARTICLE.get(),
-                    lastTickPosX - (lookVector.x * 0.5),
-                    lastTickPosY + 0.6f,
-                    lastTickPosZ - (lookVector.z * 0.5),
-                    (getPosX() - lastTickPosX - lookVector.x) * 50f,
+            level.addParticle(ParticleList.ORANGE_RAINBOW_PARTICLE.get(),
+                    xOld - (lookVector.x * 0.5),
+                    yOld + 0.6f,
+                    zOld - (lookVector.z * 0.5),
+                    (getX() - xOld - lookVector.x) * 50f,
                     0f,
-                    (getPosZ() - lastTickPosZ - lookVector.z) * 50f);
+                    (getZ() - zOld - lookVector.z) * 50f);
 
-            world.addParticle(ParticleList.YELLOW_RAINBOW_PARTICLE.get(),
-                    lastTickPosX - (lookVector.x * 0.5),
-                    lastTickPosY + 0.5f,
-                    lastTickPosZ - (lookVector.z * 0.5),
-                    (getPosX() - lastTickPosX - lookVector.x) * 50f,
+            level.addParticle(ParticleList.YELLOW_RAINBOW_PARTICLE.get(),
+                    xOld - (lookVector.x * 0.5),
+                    yOld + 0.5f,
+                    zOld - (lookVector.z * 0.5),
+                    (getX() - xOld - lookVector.x) * 50f,
                     0f,
-                    (getPosZ() - lastTickPosZ - lookVector.z) * 50f);
+                    (getZ() - zOld - lookVector.z) * 50f);
 
-            world.addParticle(ParticleList.GREEN_RAINBOW_PARTICLE.get(),
-                    lastTickPosX - (lookVector.x * 0.5),
-                    lastTickPosY + 0.4f,
-                    lastTickPosZ - (lookVector.z * 0.5),
-                    (getPosX() - lastTickPosX - lookVector.x) * 50f,
+            level.addParticle(ParticleList.GREEN_RAINBOW_PARTICLE.get(),
+                    xOld - (lookVector.x * 0.5),
+                    yOld + 0.4f,
+                    zOld - (lookVector.z * 0.5),
+                    (getX() - xOld - lookVector.x) * 50f,
                     0f,
-                    (getPosZ() - lastTickPosZ - lookVector.z) * 50f);
+                    (getZ() - zOld - lookVector.z) * 50f);
 
-            world.addParticle(ParticleList.BLUE_RAINBOW_PARTICLE.get(),
-                    lastTickPosX - (lookVector.x * 0.5),
-                    lastTickPosY + 0.3f,
-                    lastTickPosZ - (lookVector.z * 0.5),
-                    (getPosX() - lastTickPosX - lookVector.x) * 50f,
+            level.addParticle(ParticleList.BLUE_RAINBOW_PARTICLE.get(),
+                    xOld - (lookVector.x * 0.5),
+                    yOld + 0.3f,
+                    zOld - (lookVector.z * 0.5),
+                    (getX() - xOld - lookVector.x) * 50f,
                     0f,
-                    (getPosZ() - lastTickPosZ - lookVector.z) * 50f);
+                    (getZ() - zOld - lookVector.z) * 50f);
 
-            world.addParticle(ParticleList.INDIGO_RAINBOW_PARTICLE.get(),
-                    lastTickPosX - (lookVector.x * 0.5),
-                    lastTickPosY + 0.2f,
-                    lastTickPosZ - (lookVector.z * 0.5),
-                    (getPosX() - lastTickPosX - lookVector.x) * 50f,
+            level.addParticle(ParticleList.INDIGO_RAINBOW_PARTICLE.get(),
+                    xOld - (lookVector.x * 0.5),
+                    yOld + 0.2f,
+                    zOld - (lookVector.z * 0.5),
+                    (getX() - xOld - lookVector.x) * 50f,
                     0f,
-                    (getPosZ() - lastTickPosZ - lookVector.z) * 50f);
+                    (getZ() - zOld - lookVector.z) * 50f);
 
-            world.addParticle(ParticleList.VIOLET_RAINBOW_PARTICLE.get(),
-                    lastTickPosX - (lookVector.x * 0.5),
-                    lastTickPosY + 0.1f,
-                    lastTickPosZ - (lookVector.z * 0.5),
-                    (getPosX() - lastTickPosX - lookVector.x) * 50f,
+            level.addParticle(ParticleList.VIOLET_RAINBOW_PARTICLE.get(),
+                    xOld - (lookVector.x * 0.5),
+                    yOld + 0.1f,
+                    zOld - (lookVector.z * 0.5),
+                    (getX() - xOld - lookVector.x) * 50f,
                     0f,
-                    (getPosZ() - lastTickPosZ - lookVector.z) * 50f);
+                    (getZ() - zOld - lookVector.z) * 50f);
         }
 
-        super.livingTick();
+        super.aiStep();
     }
 
     /**
@@ -141,7 +140,7 @@ public class NyanCatEntity extends CatEntity {
      */
     @Override
     @Nonnull
-    public ResourceLocation getCatTypeName() {
+    public ResourceLocation getResourceLocation() {
         return NYAN_TEXTURE;
     }
 
@@ -149,12 +148,12 @@ public class NyanCatEntity extends CatEntity {
      * Nyan Cat is faster than a normal cat!
      * @return The attributes for Nyan Cat.
      */
-    public static AttributeModifierMap.MutableAttribute setCustomAttributes() {
-        return MobEntity.func_233666_p_()
-                .func_233815_a_(AttributeList.MOVEMENT_SPEED, 0.75f)
-                .func_233815_a_(AttributeList.MAX_HEALTH, 20.0d)
-                .func_233815_a_(AttributeList.ATTACK_DAMAGE, 5.0d)
-                .func_233815_a_(AttributeList.FLYING_SPEED, 0.6d);
+    public static AttributeSupplier.Builder setCustomAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.75f)
+                .add(Attributes.MAX_HEALTH, 20.0d)
+                .add(Attributes.ATTACK_DAMAGE, 5.0d)
+                .add(Attributes.FLYING_SPEED, 0.6d);
     }
 
     /**
@@ -162,8 +161,8 @@ public class NyanCatEntity extends CatEntity {
      * @param angle The angle in degrees
      * @return The angle in radians
      */
-    private float rad(float angle) {
-        return angle * (float) Math.PI / 180;
+    private double rad(float angle) {
+        return (double) angle * Math.PI / 180;
     }
 
     /**
@@ -171,9 +170,9 @@ public class NyanCatEntity extends CatEntity {
      * @return The look vector of the entity
      */
     private Vector3d lookVector() {
-        float vx = -MathHelper.sin(rad(rotationYaw)) * MathHelper.cos(rad(rotationPitch));
-        float vz = MathHelper.cos(rad(rotationYaw)) * MathHelper.cos(rad(rotationPitch));
-        float vy = -MathHelper.sin(rad(rotationPitch));
+        float vx = (float) (-Math.sin(rad(getYRot())) * Math.cos(rad(getXRot())));
+        float vz = (float) (Math.cos(rad(getYRot())) * Math.cos(rad(getXRot())));
+        float vy = (float) -Math.sin(rad(getYRot()));
         return new Vector3d(vx, vy, vz);
     }
 }

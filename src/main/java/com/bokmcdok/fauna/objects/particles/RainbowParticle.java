@@ -1,12 +1,12 @@
 package com.bokmcdok.fauna.objects.particles;
 
-import net.minecraft.client.particle.IAnimatedSprite;
-import net.minecraft.client.particle.IParticleFactory;
-import net.minecraft.client.particle.IParticleRenderType;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.SpriteTexturedParticle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particles.BasicParticleType;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @OnlyIn(Dist.CLIENT)
-public class RainbowParticle extends SpriteTexturedParticle {
+public class RainbowParticle extends TextureSheetParticle {
 
     /**
      * Construction
@@ -26,17 +26,17 @@ public class RainbowParticle extends SpriteTexturedParticle {
      * @param vY The velocity of the particle
      * @param vZ The velocity of the particle
      */
-    protected RainbowParticle(ClientWorld world,
+    protected RainbowParticle(ClientLevel world,
                               double x, double y, double z,
                               double vX, double vY, double vZ) {
         super(world, x, y, z, vX, vY, vZ);
 
         setSize(0.02f, 0.02f);
-        particleScale *= this.rand.nextFloat() * 1.1F;
-        motionX *= 0.02f;
-        motionY *= 0.02f;
-        motionZ *= 0.02f;
-        maxAge = 80;
+        quadSize *= random.nextFloat() * 1.1F;
+        xd *= 0.02f;
+        yd *= 0.02f;
+        zd *= 0.02f;
+        lifetime = 80;
     }
 
     /**
@@ -45,8 +45,8 @@ public class RainbowParticle extends SpriteTexturedParticle {
      */
     @Override
     @Nonnull
-    public IParticleRenderType getRenderType() {
-        return IParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
     }
 
     /**
@@ -54,14 +54,14 @@ public class RainbowParticle extends SpriteTexturedParticle {
      */
     @Override
     public void tick() {
-        prevPosX = posX;
-        prevPosY = posY;
-        prevPosZ = posZ;
+        xo = x;
+        yo = y;
+        zo = z;
 
-        if (age++ >= maxAge) {
-            setExpired();
+        if (age++ >= lifetime) {
+            remove();
         } else {
-            move(motionX, motionY, motionZ);
+            move(xd, yd, zd);
         }
     }
 
@@ -69,10 +69,10 @@ public class RainbowParticle extends SpriteTexturedParticle {
      * Factory to create a rainbow particle.
      */
     @OnlyIn(Dist.CLIENT)
-    public static abstract class Factory implements IParticleFactory<BasicParticleType> {
+    public static abstract class Factory implements ParticleProvider<SimpleParticleType> {
 
         //  The sprite set to use for the particle.
-        private final IAnimatedSprite spriteSet;
+        private final SpriteSet spriteSet;
 
         protected float r;
         protected float g;
@@ -82,7 +82,7 @@ public class RainbowParticle extends SpriteTexturedParticle {
          * Construction
          * @param sprite The sprite set to use
          */
-        public Factory(IAnimatedSprite sprite) {
+        public Factory(SpriteSet sprite) {
             spriteSet = sprite;
             r = 1;
             g = 1;
@@ -103,12 +103,12 @@ public class RainbowParticle extends SpriteTexturedParticle {
          */
         @Nullable
         @Override
-        public Particle makeParticle(@Nonnull BasicParticleType type,
-                                     @Nonnull ClientWorld world,
+        public Particle createParticle(@Nonnull SimpleParticleType type,
+                                     @Nonnull ClientLevel world,
                                      double x, double y, double z,
                                      double xSpeed, double ySpeed, double zSpeed) {
             RainbowParticle particle= new RainbowParticle(world, x, y, z, xSpeed, ySpeed, zSpeed);
-            particle.selectSpriteRandomly(spriteSet);
+            particle.pickSprite(spriteSet);
             particle.setColor(r, g, b);
             return particle;
         }
@@ -121,7 +121,7 @@ public class RainbowParticle extends SpriteTexturedParticle {
          * Construction
          * @param sprite The sprite set to use
          */
-        public RedFactory(IAnimatedSprite sprite) {
+        public RedFactory(SpriteSet sprite) {
             super(sprite);
             r = 1;
             g = 0;
@@ -136,7 +136,7 @@ public class RainbowParticle extends SpriteTexturedParticle {
          * Construction
          * @param sprite The sprite set to use
          */
-        public OrangeFactory(IAnimatedSprite sprite) {
+        public OrangeFactory(SpriteSet sprite) {
             super(sprite);
             r = 1;
             g = 0.5f;
@@ -151,7 +151,7 @@ public class RainbowParticle extends SpriteTexturedParticle {
          * Construction
          * @param sprite The sprite set to use
          */
-        public YellowFactory(IAnimatedSprite sprite) {
+        public YellowFactory(SpriteSet sprite) {
             super(sprite);
             r = 1;
             g = 1;
@@ -166,7 +166,7 @@ public class RainbowParticle extends SpriteTexturedParticle {
          * Construction
          * @param sprite The sprite set to use
          */
-        public GreenFactory(IAnimatedSprite sprite) {
+        public GreenFactory(SpriteSet sprite) {
             super(sprite);
             r = 0;
             g = 1;
@@ -181,7 +181,7 @@ public class RainbowParticle extends SpriteTexturedParticle {
          * Construction
          * @param sprite The sprite set to use
          */
-        public BlueFactory(IAnimatedSprite sprite) {
+        public BlueFactory(SpriteSet sprite) {
             super(sprite);
             r = 0;
             g = 0;
@@ -196,7 +196,7 @@ public class RainbowParticle extends SpriteTexturedParticle {
          * Construction
          * @param sprite The sprite set to use
          */
-        public IndigoFactory(IAnimatedSprite sprite) {
+        public IndigoFactory(SpriteSet sprite) {
             super(sprite);
             r = 0.25f;
             g = 0;
@@ -211,7 +211,7 @@ public class RainbowParticle extends SpriteTexturedParticle {
          * Construction
          * @param sprite The sprite set to use
          */
-        public VioletFactory(IAnimatedSprite sprite) {
+        public VioletFactory(SpriteSet sprite) {
             super(sprite);
             r = 1;
             g = 0.5f;

@@ -1,9 +1,9 @@
 package com.bokmcdok.fauna.lists;
 
 import com.bokmcdok.fauna.FaunaMod;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.particles.ParticleType;
-import net.minecraftforge.fml.RegistryObject;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -17,23 +17,23 @@ public class ParticleList {
             DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, FaunaMod.MOD_ID);
 
     //  A rainbow particle, used by Nyan Cat!
-    public static final RegistryObject<BasicParticleType> RED_RAINBOW_PARTICLE =
+    public static final RegistryObject<SimpleParticleType> RED_RAINBOW_PARTICLE =
             registerBasicParticle("red_rainbow_particle", true);
-    public static final RegistryObject<BasicParticleType> ORANGE_RAINBOW_PARTICLE =
+    public static final RegistryObject<SimpleParticleType> ORANGE_RAINBOW_PARTICLE =
             registerBasicParticle("orange_rainbow_particle", true);
-    public static final RegistryObject<BasicParticleType> YELLOW_RAINBOW_PARTICLE =
+    public static final RegistryObject<SimpleParticleType> YELLOW_RAINBOW_PARTICLE =
             registerBasicParticle("yellow_rainbow_particle", true);
-    public static final RegistryObject<BasicParticleType> GREEN_RAINBOW_PARTICLE =
+    public static final RegistryObject<SimpleParticleType> GREEN_RAINBOW_PARTICLE =
             registerBasicParticle("green_rainbow_particle", true);
-    public static final RegistryObject<BasicParticleType> BLUE_RAINBOW_PARTICLE =
+    public static final RegistryObject<SimpleParticleType> BLUE_RAINBOW_PARTICLE =
             registerBasicParticle("blue_rainbow_particle", true);
-    public static final RegistryObject<BasicParticleType> INDIGO_RAINBOW_PARTICLE =
+    public static final RegistryObject<SimpleParticleType> INDIGO_RAINBOW_PARTICLE =
             registerBasicParticle("indigo_rainbow_particle", true);
-    public static final RegistryObject<BasicParticleType> VIOLET_RAINBOW_PARTICLE =
+    public static final RegistryObject<SimpleParticleType> VIOLET_RAINBOW_PARTICLE =
             registerBasicParticle("violet_rainbow_particle", true);
 
     //  Helper method for registering basic particles
-    private static RegistryObject<BasicParticleType> registerBasicParticle(String location, boolean alwaysRender) {
-        return PARTICLES.register(location, () -> new BasicParticleType(alwaysRender));
+    private static RegistryObject<SimpleParticleType> registerBasicParticle(String location, boolean alwaysRender) {
+        return PARTICLES.register(location, () -> new SimpleParticleType(alwaysRender));
     }
 }
