@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.0'
+version = '0.0.1'
 group = 'com.bokmcdok.docbok' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'docbok'
 
@@ -56,7 +56,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                fauna {
+                cat {
                     source sourceSets.main
                 }
             }
@@ -78,7 +78,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                fauna {
+                cat {
                     source sourceSets.main
                 }
             }
@@ -100,10 +100,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'fauna', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'cat', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                fauna {
+                cat {
                     source sourceSets.main
                 }
             }

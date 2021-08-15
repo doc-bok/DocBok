@@ -1,4 +1,4 @@
-package com.bokmcdok.fauna.objects.particles;
+package com.bokmcdok.cat.objects.particles;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;

@@ -1,6 +1,6 @@
-package com.bokmcdok.fauna.lists;
+package com.bokmcdok.cat.lists;
 
-import com.bokmcdok.fauna.FaunaMod;
+import com.bokmcdok.cat.CatMod;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.fmllegacy.RegistryObject;
@@ -14,7 +14,7 @@ public class ParticleList {
 
     //  Our registry for particle types.
     public static final DeferredRegister<ParticleType<?>> PARTICLES =
-            DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, FaunaMod.MOD_ID);
+            DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, CatMod.MOD_ID);
 
     //  A rainbow particle, used by Nyan Cat!
     public static final RegistryObject<SimpleParticleType> RED_RAINBOW_PARTICLE =

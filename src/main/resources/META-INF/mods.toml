@@ -4,16 +4,16 @@ license="All rights reserved"
 # issueTrackerURL="http://my.issue.tracker/" #optional
 
 [[mods]] #mandatory
-    modId="fauna" #mandatory
+    modId="cat" #mandatory
     version="${file.jarVersion}" #mandatory
-    displayName="Fauna Mod" #mandatory
+    displayName="Cat Mod" #mandatory
     # updateJSONURL="http://myurl.me/" #optional
     # displayURL="http://example.com/" #optional
     # logoFile="bamboo.png" #optional
     # credits="" #optional
     authors="Doc Bok" #optional
     description='''
-    Adds a bunch of new animals to the Minecraft world.
+    Adds some new behaviours to cats.
     '''
 
     [[dependencies]] #optional
