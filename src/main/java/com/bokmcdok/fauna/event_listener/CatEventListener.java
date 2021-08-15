@@ -3,38 +3,33 @@ package com.bokmcdok.fauna.event_listener;
 import com.bokmcdok.fauna.FaunaMod;
 import com.bokmcdok.fauna.objects.entity.NyanCatEntity;
 import com.bokmcdok.fauna.lists.EntityList;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.NonTamedTargetGoal;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Food;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.NameTagItem;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.tags.ITag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.NameTagItem;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Random;
 
 /**
  * Class to override the default behaviour of a cat. This class will allow the
@@ -70,32 +65,32 @@ public class CatEventListener extends EntityEventListener {
                     "net.minecraft.entity.passive.CatEntity$TemptGoal");
 
             Constructor<?> constructor = innerClass.getDeclaredConstructor(
-                    CatEntity.class,
+                    Cat.class,
                     double.class,
                     Ingredient.class,
                     boolean.class);
 
             constructor.setAccessible(true);
 
-            CatEntity cat = (CatEntity) event.getEntity();
+            Cat cat = (Cat) event.getEntity();
 
             //  Remove the old tempt goal.
             Goal goal = ObfuscationReflectionHelper.getPrivateValue(
-                    CatEntity.class, cat, "temptGoal");
+                    Cat.class, cat, "temptGoal");
             if (goal != null) {
                 cat.goalSelector.removeGoal(goal);
             }
 
             //  Add the new tempt goal that has the new items.
-            ITag<Item> catfood = ItemTags.getCollection().getOrCreate(CAT_FOOD_ITEMS);
-            Ingredient items = Ingredient.fromTag(catfood);
+            Tag<Item> catfood = ItemTags.getAllTags().getTagOrEmpty(CAT_FOOD_ITEMS);
+            Ingredient items = Ingredient.of(catfood);
             Goal newGoal = (Goal) constructor.newInstance(
                     cat, 0.6D, items, true);
             cat.goalSelector.addGoal(3, newGoal);
 
             //  Add new attack goals for other small creatures.
-            cat.targetSelector.addGoal(1, new NonTamedTargetGoal<>(
-                    cat, ChickenEntity.class, false, null));
+            cat.targetSelector.addGoal(1, new NonTameRandomTargetGoal<>(
+                    cat, Chicken.class, false, null));
 
             constructor.setAccessible(false);
 
@@ -117,55 +112,58 @@ public class CatEventListener extends EntityEventListener {
      */
     @Override
     protected void onPlayerInteract(PlayerInteractEvent.EntityInteract event) {
-        PlayerEntity player = event.getPlayer();
-        Hand hand = event.getHand();
-        ItemStack stack = player.getHeldItem(hand);
+        Player player = event.getPlayer();
+        InteractionHand hand = event.getHand();
+        ItemStack stack = player.getItemInHand(hand);
         Item item = stack.getItem();
-        CatEntity cat = (CatEntity) event.getTarget();
-        ITag<Item> catfood = ItemTags.getCollection().getOrCreate(CAT_FOOD_ITEMS);
-        if (item.isIn(catfood)) {
-            if (cat.isTamed() && cat.isOwner(player)) {
-                Food food = item.getFood();
-                if (food != null && heal(cat, item.getFood().getHealing())) {
+        Cat cat = (Cat) event.getTarget();
+        Tag<Item> catfood = ItemTags.getAllTags().getTagOrEmpty(CAT_FOOD_ITEMS);
+        if (catfood.contains(item)) {
+            if (cat.isTame() && cat.isOwnedBy(player)) {
+                FoodProperties food = item.getFoodProperties();
+                if (food != null && heal(cat, food.getNutrition())) {
                     consumeEvent(event, player, hand, stack);
                 }
             } else {
                 consumeEvent(event, player, hand, stack);
-                if (!cat.world.isRemote) {
-                    if (cat.getRNG().nextInt(3) == 0) {
-                        cat.setTamedBy(player);
-                        playTameEffect(cat, true);
+                if (!event.getWorld().isClientSide()) {
+                    if (cat.getRandom().nextInt(3) == 0) {
+                        cat.tame(player);
+                        cat.setOrderedToSit(true);
+                        cat.level.broadcastEntityEvent(cat, (byte)7);
+                        //playTameEffect(cat, true);
                     } else {
-                        playTameEffect(cat, false);
+                        //playTameEffect(cat, false);
+                        cat.level.broadcastEntityEvent(cat, (byte)8);
                     }
-
-                    cat.world.setEntityState(cat, (byte) 7);
                 }
             }
         }
 
         //  Add Snow to the game!
         if (item instanceof NameTagItem) {
-            String name = TextFormatting.getTextWithoutFormattingCodes(stack.getDisplayName().getString());
+            String name = stack.getHoverName().getString();
             if ("Snow".equals(name)) {
                 cat.setCatType(8);
             } else if ("Marty".equals(name)) {
-                NyanCatEntity nyanCat = EntityList.NYAN_CAT.get().create(player.world);
-                if (nyanCat != null) {
-                    nyanCat.copyLocationAndAnglesFrom(cat);
-                    nyanCat.onInitialSpawn(player.world,
-                            player.world.getDifficultyForLocation(cat.func_233580_cy_()),
-                            SpawnReason.CONVERSION,
-                            null,
-                            null);
-                    nyanCat.setCustomName(stack.getDisplayName());
-                    nyanCat.setCustomNameVisible(true);
-                    nyanCat.setOwnerId(cat.getOwnerId());
-                    cat.remove();
+                if (event.getWorld() instanceof ServerLevel) {
+                    NyanCatEntity nyanCat = EntityList.NYAN_CAT.get().create(player.level);
+                    if (nyanCat != null) {
+                        nyanCat.copyPosition(cat);
+                        nyanCat.finalizeSpawn((ServerLevel) event.getWorld(),
+                                player.level.getCurrentDifficultyAt(cat.getOnPos()),
+                                MobSpawnType.CONVERSION,
+                                null,
+                                null);
+                        nyanCat.setCustomName(stack.getDisplayName());
+                        nyanCat.setCustomNameVisible(true);
+                        nyanCat.setOwnerUUID(cat.getOwnerUUID());
+                        cat.remove(Entity.RemovalReason.DISCARDED);
 
-                    player.world.addEntity(nyanCat);
+                        player.level.addFreshEntity(nyanCat);
 
-                    consumeEvent(event, player, hand, stack);
+                        consumeEvent(event, player, hand, stack);
+                    }
                 }
             }
         }
@@ -173,13 +171,13 @@ public class CatEventListener extends EntityEventListener {
 
     /**
      * Heal the animal by the specified amount.
-     * @param animal The animal to heal.
+     * @param cat The animal to heal.
      * @param heal The amount to heal.
      * @return True if the animal was healed.
      */
-    private boolean heal(AnimalEntity animal, int heal) {
-        if (animal.getHealth() < animal.getMaxHealth() && heal > 0.0f) {
-            animal.heal(heal);
+    private boolean heal(Cat cat, int heal) {
+        if (cat.getHealth() < cat.getMaxHealth() && heal > 0.0f) {
+            cat.heal(heal);
             return true;
         }
 
@@ -192,37 +190,13 @@ public class CatEventListener extends EntityEventListener {
      * @param player The player
      * @param stack The stack of items used on the mob
      */
-    private void consumeEvent(PlayerInteractEvent.EntityInteract event, PlayerEntity player, Hand hand, ItemStack stack) {
-        if (!player.abilities.isCreativeMode) {
-            ItemStack leftovers = stack.onItemUseFinish(player.getEntityWorld(), player);
-            player.setHeldItem(hand, leftovers);
+    private void consumeEvent(PlayerInteractEvent.EntityInteract event, Player player, InteractionHand hand, ItemStack stack) {
+        if (!player.isCreative()) {
+            ItemStack leftovers = stack.finishUsingItem(player.level, player);
+            player.setItemInHand(hand, leftovers);
         }
 
         event.setCanceled(true);
-        event.setCancellationResult(ActionResultType.SUCCESS);
-    }
-
-    /**
-     * Play the taming effect, will either be hearts or smoke depending on status
-     * @param entity The entity being tamed.
-     * @param play Whether to play the success or fail effect.
-     */
-    public static void playTameEffect(TameableEntity entity, boolean play) {
-        IParticleData iparticledata = ParticleTypes.HEART;
-        if (!play) {
-            iparticledata = ParticleTypes.SMOKE;
-        }
-
-        Vector3d position = entity.getPositionVec();
-        Random rand = entity.getRNG();
-        for(int i = 0; i < 7; ++i) {
-            double d0 = rand.nextGaussian() * 0.02D;
-            double d1 = rand.nextGaussian() * 0.02D;
-            double d2 = rand.nextGaussian() * 0.02D;
-            entity.world.addParticle(iparticledata,
-                    position.x + (double)(rand.nextFloat() * entity.getWidth() * 2.0F) - (double)entity.getWidth(),
-                    position.y + 0.5D + (double)(rand.nextFloat() * entity.getHeight()),
-                    position.z + (double)(rand.nextFloat() * entity.getWidth() * 2.0F) - (double)entity.getWidth(), d0, d1, d2);
-        }
+        event.setCancellationResult(InteractionResult.SUCCESS);
     }
 }
