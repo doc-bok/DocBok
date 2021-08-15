@@ -1,8 +1,8 @@
-package com.bokmcdok.fauna.util;
+package com.bokmcdok.cat.util;
 
-import com.bokmcdok.fauna.FaunaMod;
-import com.bokmcdok.fauna.objects.entity.NyanCatEntity;
-import com.bokmcdok.fauna.lists.EntityList;
+import com.bokmcdok.cat.CatMod;
+import com.bokmcdok.cat.objects.entity.NyanCatEntity;
+import com.bokmcdok.cat.lists.EntityList;
 import net.minecraft.client.renderer.entity.CatRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -14,7 +14,7 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = FaunaMod.MOD_ID,
+@Mod.EventBusSubscriber(modid = CatMod.MOD_ID,
         bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityUtil {
 

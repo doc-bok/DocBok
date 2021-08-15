@@ -1,8 +1,8 @@
-package com.bokmcdok.fauna.event_listener;
+package com.bokmcdok.cat.event_listener;
 
-import com.bokmcdok.fauna.FaunaMod;
-import com.bokmcdok.fauna.objects.entity.NyanCatEntity;
-import com.bokmcdok.fauna.lists.EntityList;
+import com.bokmcdok.cat.CatMod;
+import com.bokmcdok.cat.objects.entity.NyanCatEntity;
+import com.bokmcdok.cat.lists.EntityList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
@@ -42,7 +42,7 @@ public class CatEventListener extends EntityEventListener {
 
     //  The tag that contains a list of items cats can eat.
     private static final ResourceLocation CAT_FOOD_ITEMS =
-            new ResourceLocation(FaunaMod.MOD_ID, "cat_food_items");
+            new ResourceLocation(CatMod.MOD_ID, "cat_food_items");
 
     /**
      * Create a listener that listens for cat events.

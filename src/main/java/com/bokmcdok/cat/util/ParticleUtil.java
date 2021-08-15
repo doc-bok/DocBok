@@ -1,8 +1,8 @@
-package com.bokmcdok.fauna.util;
+package com.bokmcdok.cat.util;
 
-import com.bokmcdok.fauna.FaunaMod;
-import com.bokmcdok.fauna.lists.ParticleList;
-import com.bokmcdok.fauna.objects.particles.RainbowParticle;
+import com.bokmcdok.cat.CatMod;
+import com.bokmcdok.cat.lists.ParticleList;
+import com.bokmcdok.cat.objects.particles.RainbowParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 /**
  * Registers the particle factories.
  */
-@Mod.EventBusSubscriber(modid = FaunaMod.MOD_ID,
+@Mod.EventBusSubscriber(modid = CatMod.MOD_ID,
         bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ParticleUtil {
 

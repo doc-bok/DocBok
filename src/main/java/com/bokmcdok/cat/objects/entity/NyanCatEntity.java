@@ -1,8 +1,8 @@
-package com.bokmcdok.fauna.objects.entity;
+package com.bokmcdok.cat.objects.entity;
 
-import com.bokmcdok.fauna.FaunaMod;
-import com.bokmcdok.fauna.lists.ParticleList;
-import com.bokmcdok.fauna.lists.SoundEventList;
+import com.bokmcdok.cat.CatMod;
+import com.bokmcdok.cat.lists.ParticleList;
+import com.bokmcdok.cat.lists.SoundEventList;
 import com.mojang.math.Vector3d;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -31,7 +31,7 @@ public class NyanCatEntity extends Cat {
 
     //  This is the Nyan Cat's texture, based on the default cat textures.
     private static final ResourceLocation NYAN_TEXTURE =
-            new ResourceLocation(FaunaMod.MOD_ID, "textures/entity/cat/nyan.png");
+            new ResourceLocation(CatMod.MOD_ID, "textures/entity/cat/nyan.png");
 
     /**
      * Construction
