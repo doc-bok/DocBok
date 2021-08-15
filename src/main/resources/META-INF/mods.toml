@@ -4,34 +4,7 @@ license="All rights reserved"
 # issueTrackerURL="http://my.issue.tracker/" #optional
 
 [[mods]] #mandatory
-    modId="data" #mandatory
-    version="${file.jarVersion}" #mandatory
-    displayName="Data Mod" #mandatory
-    # updateJSONURL="http://myurl.me/" #optional
-    # displayURL="http://example.com/" #optional
-    # logoFile="bamboo.png" #optional
-    # credits="" #optional
-    authors="Doc Bok" #optional
-    description='''
-    Data drive the Minecraft world.
-    '''
-
-    [[dependencies]] #optional
-        modId="forge" #mandatory
-        mandatory=true #mandatory
-        versionRange="[32,)" #mandatory        ordering="NONE"
-        side="BOTH"
-
-    # Here's another dependency
-    [[dependencies]]
-        modId="minecraft"
-        mandatory=true
-        versionRange="[1.16.1]"
-        ordering="NONE"
-        side="BOTH"
-
-[[mods]] #mandatory
-    modId="fauna" #mandatory
+    modId="cat" #mandatory
     version="${file.jarVersion}" #mandatory
     displayName="Fauna Mod" #mandatory
     # updateJSONURL="http://myurl.me/" #optional
