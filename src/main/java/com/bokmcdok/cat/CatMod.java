@@ -16,7 +16,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class CatMod
 {
     //  The Mod ID.
-    public static final String MOD_ID = "fauna";
+    public static final String MOD_ID = "cat";
 
     /**
      * Register the event listeners for the mod.

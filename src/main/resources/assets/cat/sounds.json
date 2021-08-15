@@ -1,0 +1,6 @@
+{
+  "nyan_cat_ambient": {
+    "subtitle": "cat.subtitle.nyan_cat_ambient",
+    "sounds": [ "cat:nyan_cat_ambient" ]
+  }
+}
