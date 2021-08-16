@@ -31,6 +31,7 @@ public class EntityUtil {
     /**
      * Register the attributes for living entities.
      */
+    @SubscribeEvent
     public static void registerEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(EntityList.NYAN_CAT.get(), NyanCatEntity.setCustomAttributes().build());
     }
