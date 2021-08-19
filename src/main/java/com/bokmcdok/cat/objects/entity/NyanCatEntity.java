@@ -4,8 +4,10 @@ import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.lists.ParticleList;
 import com.bokmcdok.cat.lists.SoundEventList;
 import com.mojang.math.Vector3d;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,6 +35,8 @@ public class NyanCatEntity extends Cat {
     //  This is the Nyan Cat's texture, based on the default cat textures.
     private static final ResourceLocation NYAN_TEXTURE =
             new ResourceLocation(CatMod.MOD_ID, "textures/entity/cat/nyan.png");
+
+    private BlockPos targetPosition;
 
     /**
      * Construction
@@ -132,6 +137,36 @@ public class NyanCatEntity extends Cat {
         }
 
         super.aiStep();
+    }
+
+    @Override
+    public void customServerAiStep() {
+        //super.customServerAiStep();
+        if (targetPosition != null &&
+                (!level.isEmptyBlock(targetPosition) || targetPosition.getY() <= level.getMinBuildHeight())) {
+            targetPosition = null;
+        }
+
+        if (targetPosition == null || random.nextInt(30) == 0 || targetPosition.closerThan(position(), 2.0D)) {
+            targetPosition = new BlockPos(
+                    getX() + (double)random.nextInt(7) - (double)random.nextInt(7),
+                    getY() + (double)random.nextInt(6) - 2.0D,
+                    getZ() + (double)random.nextInt(7) - (double)random.nextInt(7));
+        }
+
+        double d2 = (double)targetPosition.getX() + 0.5D - getX();
+        double d0 = (double)targetPosition.getY() + 0.1D - getY();
+        double d1 = (double)targetPosition.getZ() + 0.5D - getZ();
+        Vec3 vec3 = getDeltaMovement();
+        Vec3 vec31 = vec3.add(
+                (Math.signum(d2) * 0.5D - vec3.x) * (double)0.1F,
+                (Math.signum(d0) * (double)0.7F - vec3.y) * (double)0.1F,
+                (Math.signum(d1) * 0.5D - vec3.z) * (double)0.1F);
+        setDeltaMovement(vec31);
+        float f = (float)(Mth.atan2(vec31.z, vec31.x) * (double)(180F / (float)Math.PI)) - 90.0F;
+        float f1 = Mth.wrapDegrees(f - getYRot());
+        zza = 0.5F;
+        setYRot(getYRot() + f1);
     }
 
     /**
