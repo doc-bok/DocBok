@@ -155,7 +155,7 @@ public class CatEventListener extends EntityEventListener {
                                 MobSpawnType.CONVERSION,
                                 null,
                                 null);
-                        nyanCat.setCustomName(stack.getDisplayName());
+                        nyanCat.setCustomName(stack.getHoverName());
                         nyanCat.setCustomNameVisible(true);
                         nyanCat.setOwnerUUID(cat.getOwnerUUID());
                         cat.remove(Entity.RemovalReason.DISCARDED);
