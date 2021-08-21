@@ -5,6 +5,7 @@ import com.bokmcdok.cat.lists.ParticleList;
 import com.bokmcdok.cat.lists.SoundEventList;
 import com.mojang.math.Vector3d;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,7 +38,11 @@ public class NyanCatEntity extends Cat {
     private static final ResourceLocation NYAN_TEXTURE =
             new ResourceLocation(CatMod.MOD_ID, "textures/entity/cat/nyan.png");
 
+    //  The target position for Nyan Cat's movement.
     private BlockPos targetPosition;
+
+    //  The direction that Nyan Cat is looking.
+    private final Vector3d lookVector = new Vector3d(0, 0, 0);
 
     /**
      * Construction
@@ -78,62 +84,15 @@ public class NyanCatEntity extends Cat {
     @Override
     public void aiStep() {
         if (level.isClientSide()) {
-            Vector3d lookVector = lookVector();
-            level.addParticle(ParticleList.RED_RAINBOW_PARTICLE.get(),
-                    xOld - (lookVector.x * 0.5),
-                    yOld + 0.7f,
-                    zOld - (lookVector.z * 0.5),
-                    (getX() - xOld - lookVector.x) * 50f,
-                    0f,
-                    (getZ() - zOld - lookVector.z) * 50f);
+            updateLookVector();
 
-            level.addParticle(ParticleList.ORANGE_RAINBOW_PARTICLE.get(),
-                    xOld - (lookVector.x * 0.5),
-                    yOld + 0.6f,
-                    zOld - (lookVector.z * 0.5),
-                    (getX() - xOld - lookVector.x) * 50f,
-                    0f,
-                    (getZ() - zOld - lookVector.z) * 50f);
-
-            level.addParticle(ParticleList.YELLOW_RAINBOW_PARTICLE.get(),
-                    xOld - (lookVector.x * 0.5),
-                    yOld + 0.5f,
-                    zOld - (lookVector.z * 0.5),
-                    (getX() - xOld - lookVector.x) * 50f,
-                    0f,
-                    (getZ() - zOld - lookVector.z) * 50f);
-
-            level.addParticle(ParticleList.GREEN_RAINBOW_PARTICLE.get(),
-                    xOld - (lookVector.x * 0.5),
-                    yOld + 0.4f,
-                    zOld - (lookVector.z * 0.5),
-                    (getX() - xOld - lookVector.x) * 50f,
-                    0f,
-                    (getZ() - zOld - lookVector.z) * 50f);
-
-            level.addParticle(ParticleList.BLUE_RAINBOW_PARTICLE.get(),
-                    xOld - (lookVector.x * 0.5),
-                    yOld + 0.3f,
-                    zOld - (lookVector.z * 0.5),
-                    (getX() - xOld - lookVector.x) * 50f,
-                    0f,
-                    (getZ() - zOld - lookVector.z) * 50f);
-
-            level.addParticle(ParticleList.INDIGO_RAINBOW_PARTICLE.get(),
-                    xOld - (lookVector.x * 0.5),
-                    yOld + 0.2f,
-                    zOld - (lookVector.z * 0.5),
-                    (getX() - xOld - lookVector.x) * 50f,
-                    0f,
-                    (getZ() - zOld - lookVector.z) * 50f);
-
-            level.addParticle(ParticleList.VIOLET_RAINBOW_PARTICLE.get(),
-                    xOld - (lookVector.x * 0.5),
-                    yOld + 0.1f,
-                    zOld - (lookVector.z * 0.5),
-                    (getX() - xOld - lookVector.x) * 50f,
-                    0f,
-                    (getZ() - zOld - lookVector.z) * 50f);
+            addRainbowParticle(ParticleList.RED_RAINBOW_PARTICLE, 0.7f);
+            addRainbowParticle(ParticleList.ORANGE_RAINBOW_PARTICLE, 0.6f);
+            addRainbowParticle(ParticleList.YELLOW_RAINBOW_PARTICLE, 0.5f);
+            addRainbowParticle(ParticleList.GREEN_RAINBOW_PARTICLE, 0.4f);
+            addRainbowParticle(ParticleList.BLUE_RAINBOW_PARTICLE, 0.3f);
+            addRainbowParticle(ParticleList.INDIGO_RAINBOW_PARTICLE, 0.2f);
+            addRainbowParticle(ParticleList.VIOLET_RAINBOW_PARTICLE, 0.1f);
         }
 
         super.aiStep();
@@ -170,6 +129,21 @@ public class NyanCatEntity extends Cat {
     }
 
     /**
+     * Add a rainbow particle.
+     * @param particle The type of particle to add.
+     * @param yOffset The y-offset of the particle.
+     */
+    private void addRainbowParticle(RegistryObject<SimpleParticleType> particle, float yOffset) {
+        level.addParticle(particle.get(),
+                xOld - (lookVector.x * 0.5),
+                yOld + yOffset,
+                zOld - (lookVector.z * 0.5),
+                (getX() - xOld - lookVector.x) * 50f,
+                0f,
+                (getZ() - zOld - lookVector.z) * 50f);
+    }
+
+    /**
      * Used by the renderer class.
      * @return The Resource Location of Nyan Cat's texture.
      */
@@ -201,13 +175,12 @@ public class NyanCatEntity extends Cat {
     }
 
     /**
-     * Helper to get the look vector of the entity
-     * @return The look vector of the entity
+     * Helper to get the look vector of the entity.
      */
-    private Vector3d lookVector() {
-        float vx = (float) (-Math.sin(rad(getYRot())) * Math.cos(rad(getXRot())));
-        float vz = (float) (Math.cos(rad(getYRot())) * Math.cos(rad(getXRot())));
-        float vy = (float) -Math.sin(rad(getYRot()));
-        return new Vector3d(vx, vy, vz);
+    private void updateLookVector() {
+        double vx = -Math.sin(rad(getYRot())) * Math.cos(rad(getXRot()));
+        double vz = Math.cos(rad(getYRot())) * Math.cos(rad(getXRot()));
+        double vy = -Math.sin(rad(getYRot()));
+        lookVector.set(vx, vy, vz);
     }
 }
