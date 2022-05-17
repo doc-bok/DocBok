@@ -21,7 +21,7 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -106,7 +106,7 @@ public class NyanCatEntity extends Cat {
             targetPosition = null;
         }
 
-        if (targetPosition == null || random.nextInt(30) == 0 || targetPosition.closerThan(position(), 2.0D)) {
+        if (targetPosition == null || random.nextInt(30) == 0 || targetPosition.closerThan(blockPosition(), 2.0D)) {
             targetPosition = new BlockPos(
                     getX() + (double)random.nextInt(7) - (double)random.nextInt(7),
                     getY() + (double)random.nextInt(6) - 2.0D,

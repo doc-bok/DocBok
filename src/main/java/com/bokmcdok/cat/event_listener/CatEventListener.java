@@ -3,16 +3,19 @@ package com.bokmcdok.cat.event_listener;
 import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.objects.entity.NyanCatEntity;
 import com.bokmcdok.cat.lists.EntityList;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.target.NonTameRandomTargetGoal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Chicken;
@@ -56,7 +59,7 @@ public class CatEventListener extends EntityEventListener {
      * attacks more animals.
      * @param event Information for the event.
      */
-    @Override
+    /*@Override
     protected void onJoinWorld(EntityJoinWorldEvent event) {
         try {
             //  Get the Cat's TemptGoal class and set it's constructor to be
@@ -84,8 +87,7 @@ public class CatEventListener extends EntityEventListener {
             //  Add the new tempt goal that has the new items.
             Tag<Item> catfood = ItemTags.getAllTags().getTagOrEmpty(CAT_FOOD_ITEMS);
             Ingredient items = Ingredient.of(catfood);
-            Goal newGoal = (Goal) constructor.newInstance(
-                    cat, 0.6D, items, true);
+            Goal newGoal = new TemptGoal(cat, 0.6D, items, true);
             cat.goalSelector.addGoal(3, newGoal);
 
             //  Add new attack goals for other small creatures.
@@ -104,13 +106,13 @@ public class CatEventListener extends EntityEventListener {
                 NoSuchMethodException e) {
             LOGGER.error(e.getMessage());
         }
-    }
+    }*/
 
     /**
      * Handles taming and feeding of cats using custom food items.
      * @param event Information for the event.
      */
-    @Override
+    /*@Override
     protected void onPlayerInteract(PlayerInteractEvent.EntityInteract event) {
         Player player = event.getPlayer();
         InteractionHand hand = event.getHand();
@@ -167,7 +169,7 @@ public class CatEventListener extends EntityEventListener {
                 }
             }
         }
-    }
+    }*/
 
     /**
      * Heal the animal by the specified amount.
