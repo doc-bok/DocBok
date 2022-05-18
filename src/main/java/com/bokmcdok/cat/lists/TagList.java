@@ -36,7 +36,6 @@ public class TagList extends SimpleJsonResourceReloadListener {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     //  The list of tags loaded from data.
-    private final Map<ResourceLocation, Tag> tags = Maps.newHashMap();
 
     /**
      * Creates a JSON listener ready for any data reloads.
@@ -57,6 +56,8 @@ public class TagList extends SimpleJsonResourceReloadListener {
     protected void apply(Map<ResourceLocation, JsonElement> files,
                          @NotNull ResourceManager resourceManager,
                          @NotNull ProfilerFiller profilerFiller) {
+        Map<ResourceLocation, Tag> tags = Maps.newHashMap();
+
         files.forEach((key, value) -> {
             try {
                 JsonObject jsonObject = GsonHelper.convertToJsonObject(value, "tag");
