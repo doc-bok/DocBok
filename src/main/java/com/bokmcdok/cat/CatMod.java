@@ -4,6 +4,7 @@ import com.bokmcdok.cat.lists.ParticleList;
 import com.bokmcdok.cat.event_listener.CatEventListener;
 import com.bokmcdok.cat.lists.EntityList;
 import com.bokmcdok.cat.lists.SoundEventList;
+import com.bokmcdok.cat.lists.TagList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -29,6 +30,9 @@ public class CatMod
 
         //  Event listeners
         new CatEventListener();
+
+        // Lists
+        new TagList();
 
         // Deferred registries.
         EntityList.ENTITIES.register(modEventBus);
