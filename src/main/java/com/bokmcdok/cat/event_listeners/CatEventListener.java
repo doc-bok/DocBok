@@ -1,7 +1,7 @@
-package com.bokmcdok.cat.event_listener;
+package com.bokmcdok.cat.event_listeners;
 
 import com.bokmcdok.cat.lists.TagList;
-import com.bokmcdok.cat.objects.entity.NyanCatEntity;
+import com.bokmcdok.cat.objects.entities.NyanCat;
 import com.bokmcdok.cat.lists.EntityList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -106,7 +106,7 @@ public class CatEventListener extends EntityEventListener {
                 cat.setCatType(8);
             } else if ("Marty".equals(name)) {
                 if (event.getWorld() instanceof ServerLevel) {
-                    NyanCatEntity nyanCat = EntityList.NYAN_CAT.get().create(player.level);
+                    NyanCat nyanCat = EntityList.NYAN_CAT.get().create(player.level);
                     if (nyanCat != null) {
                         nyanCat.copyPosition(cat);
                         nyanCat.finalizeSpawn((ServerLevel) event.getWorld(),

@@ -1,4 +1,4 @@
-package com.bokmcdok.cat.objects.entity;
+package com.bokmcdok.cat.objects.entities;
 
 import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.lists.ParticleList;
@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,7 +30,7 @@ import javax.annotation.Nullable;
 /**
  * Nyan Cat in Minecraft!
  */
-public class NyanCatEntity extends Cat {
+public class NyanCat extends Cat {
 
     //  This is the name we will use to reference the Nyan Cat
     public static final String NAME = "nyan_cat";
@@ -49,7 +50,7 @@ public class NyanCatEntity extends Cat {
      * @param type The Entity Type for the cat.
      * @param world The current world.
      */
-    public NyanCatEntity(EntityType<? extends NyanCatEntity> type, Level world) {
+    public NyanCat(EntityType<? extends NyanCat> type, Level world) {
         super(type, world);
         this.moveControl = new FlyingMoveControl(this, 20, true);
     }
@@ -98,9 +99,12 @@ public class NyanCatEntity extends Cat {
         super.aiStep();
     }
 
+    /**
+     * Handles the movement of the Nyan Cat - making it dance around like the
+     * actual Nyan Cat.
+     */
     @Override
     public void customServerAiStep() {
-        //super.customServerAiStep();
         if (targetPosition != null &&
                 (!level.isEmptyBlock(targetPosition) || targetPosition.getY() <= level.getMinBuildHeight())) {
             targetPosition = null;
@@ -157,7 +161,7 @@ public class NyanCatEntity extends Cat {
      * Nyan Cat is faster than a normal cat!
      * @return The attributes for Nyan Cat.
      */
-    public static AttributeSupplier.Builder setCustomAttributes() {
+    public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MOVEMENT_SPEED, 0.75f)
                 .add(Attributes.MAX_HEALTH, 20.0d)
