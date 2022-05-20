@@ -1,0 +1,9 @@
+{
+  "parent": "item/handheld_rod",
+  "textures": {
+    "layer0": "cat:item/butterfly_net"
+  },
+  "overrides": [
+    { "predicate": { "custom_model_data": 1 }, "model": "cat:item/butterfly_net_full" }
+  ]
+}
