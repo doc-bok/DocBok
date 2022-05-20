@@ -4,6 +4,14 @@
     "layer0": "cat:item/butterfly_net"
   },
   "overrides": [
-    { "predicate": { "custom_model_data": 1 }, "model": "cat:item/butterfly_net_full" }
+    { "predicate": { "custom_model_data": 1 }, "model": "cat:item/butterfly_net_full_blue" },
+    { "predicate": { "custom_model_data": 2 }, "model": "cat:item/butterfly_net_full_nyan" },
+    { "predicate": { "custom_model_data": 3 }, "model": "cat:item/butterfly_net_full_purple" },
+    { "predicate": { "custom_model_data": 4 }, "model": "cat:item/butterfly_net_full_purple_trim" },
+    { "predicate": { "custom_model_data": 5 }, "model": "cat:item/butterfly_net_full_rainbow" },
+    { "predicate": { "custom_model_data": 6 }, "model": "cat:item/butterfly_net_full_red" },
+    { "predicate": { "custom_model_data": 7 }, "model": "cat:item/butterfly_net_full_seethru" },
+    { "predicate": { "custom_model_data": 8 }, "model": "cat:item/butterfly_net_full_sword" },
+    { "predicate": { "custom_model_data": 9 }, "model": "cat:item/butterfly_net_full_white" }
   ]
 }
