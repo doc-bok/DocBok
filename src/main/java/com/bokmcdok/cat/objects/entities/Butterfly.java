@@ -1,11 +1,13 @@
 package com.bokmcdok.cat.objects.entities;
 
+import com.bokmcdok.cat.objects.renderers.ButterflyRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -13,11 +15,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -103,6 +107,34 @@ public class Butterfly extends AmbientCreature {
     @Override
     public boolean causeFallDamage(float fallDistance, float blockModifier, @NotNull DamageSource damageSource) {
         return false;
+    }
+
+    /**
+     * Set the variant of this butterfly before spawning
+     * @param level The current level
+     * @param difficulty The difficulty setting
+     * @param spawnType The spawn type
+     * @param groupData The group being spawned with
+     * @param tag The tag data
+     * @return Updated group data
+     */
+    @Nullable
+    @Override
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level,
+                                        @NotNull DifficultyInstance difficulty,
+                                        @NotNull MobSpawnType spawnType,
+                                        @Nullable SpawnGroupData groupData,
+                                        @Nullable CompoundTag tag) {
+        setVariant(this.random.nextInt(ButterflyRenderer.TEXTURE.length));
+        return super.finalizeSpawn(level, difficulty, spawnType, groupData, tag);
+    }
+
+    /**
+     * Get the variant of butterfly.
+     * @return The index of the texture to use for the butterfly.
+     */
+    public int getVariant() {
+        return this.entityData.get(DATA_VARIANT);
     }
 
     /**
@@ -250,5 +282,13 @@ public class Butterfly extends AmbientCreature {
     @Override
     protected void pushEntities() {
         //  No-op
+    }
+
+    /**
+     * Set the variant of this butterfly.
+     * @param variant The variant of this butterfly.
+     */
+    private void setVariant(int variant) {
+        entityData.set(DATA_VARIANT, variant);
     }
 }

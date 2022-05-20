@@ -13,8 +13,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ButterflyRenderer extends MobRenderer<Butterfly, ButterflyModel> {
     //  The texture locations
-    ResourceLocation TEXTURE =
-            new ResourceLocation("cat:textures/entity/butterfly/butterfly.png");
+    public static ResourceLocation[] TEXTURE = {
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_blue.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_purple.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_purple_trim.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_rainbow.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_red.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_seethru.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_sword.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_white.png"),
+    };
 
     /**
      * Bakes a new model for the renderer
@@ -31,7 +39,7 @@ public class ButterflyRenderer extends MobRenderer<Butterfly, ButterflyModel> {
      */
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull Butterfly entity) {
-        return TEXTURE;
+        return TEXTURE[entity.getVariant()];
     }
 
     /**
