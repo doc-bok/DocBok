@@ -1,0 +1,151 @@
+{
+  "parent": "cat:butterfly/catch_butterfly",
+  "display": {
+    "icon": {
+      "item": "cat:butterfly_net"
+    },
+    "title": {
+      "translate": "advancements.butterfly.catch_all_butterflies.title"
+    },
+    "description": {
+      "translate": "advancements.butterfly.catch_all_butterflies.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 100
+  },
+  "criteria": {
+    "caught_blue": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:1}"
+          }
+        ]
+      }
+    },
+    "caught_nyan": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:2}"
+          }
+        ]
+      }
+    },
+    "caught_purple": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:3}"
+          }
+        ]
+      }
+    },
+    "caught_purple_trim": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:4}"
+          }
+        ]
+      }
+    },
+    "caught_rainbow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:5}"
+          }
+        ]
+      }
+    },
+    "caught_red": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:6}"
+          }
+        ]
+      }
+    },
+    "caught_seethru": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:7}"
+          }
+        ]
+      }
+    },
+    "caught_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:8}"
+          }
+        ]
+      }
+    },
+    "caught_white": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:9}"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "caught_blue"
+    ],
+    [
+      "caught_nyan"
+    ],
+    [
+      "caught_purple"
+    ],
+    [
+      "caught_purple_trim"
+    ],
+    [
+      "caught_rainbow"
+    ],
+    [
+      "caught_red"
+    ],
+    [
+      "caught_seethru"
+    ],
+    [
+      "caught_sword"
+    ],
+    [
+      "caught_white"
+    ]
+  ]
+}

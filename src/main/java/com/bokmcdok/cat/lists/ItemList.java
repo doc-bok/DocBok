@@ -3,6 +3,7 @@ package com.bokmcdok.cat.lists;
 import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.objects.entities.Butterfly;
 import com.bokmcdok.cat.objects.entities.NyanCat;
+import com.bokmcdok.cat.objects.items.ButterflyNetItem;
 import com.bokmcdok.cat.objects.items.PeacemakerHoneyBottleItem;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.CreativeModeTab;
@@ -34,6 +35,13 @@ public class ItemList {
                     .food(Foods.HONEY_BOTTLE)
                     .tab(CreativeModeTab.TAB_FOOD)
                     .stacksTo(16)));
+
+    //  Butterfly net
+    //  - Used to catch butterflies
+    public static final RegistryObject<Item> BUTTERFLY_NET = ITEMS.register(ButterflyNetItem.NAME,
+            () -> new ButterflyNetItem(new Item.Properties()
+                    .stacksTo(1)
+                    .tab(CreativeModeTab.TAB_TOOLS)));
 
     //  Spawn eggs
     public static final RegistryObject<Item> BUTTERFLY_EGG = ITEMS.register(Butterfly.NAME,

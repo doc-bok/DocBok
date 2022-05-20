@@ -52,6 +52,7 @@ public class Butterfly extends AmbientCreature {
     @Nullable
     private BlockPos targetPosition;
 
+
     /**
      * Defines the spawn rules for butterflies: they can spawn anywhere the
      * light level is above 8.
@@ -175,6 +176,14 @@ public class Butterfly extends AmbientCreature {
     }
 
     /**
+     * Set the variant of this butterfly.
+     * @param variant The variant of this butterfly.
+     */
+    public void setVariant(int variant) {
+        entityData.set(DATA_VARIANT, variant);
+    }
+
+    /**
      * Update the butterfly's movement delta.
      */
     @Override
@@ -282,13 +291,5 @@ public class Butterfly extends AmbientCreature {
     @Override
     protected void pushEntities() {
         //  No-op
-    }
-
-    /**
-     * Set the variant of this butterfly.
-     * @param variant The variant of this butterfly.
-     */
-    private void setVariant(int variant) {
-        entityData.set(DATA_VARIANT, variant);
     }
 }
