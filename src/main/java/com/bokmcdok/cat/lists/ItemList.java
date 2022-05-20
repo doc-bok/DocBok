@@ -40,6 +40,7 @@ public class ItemList {
     //  - Used to catch butterflies
     public static final RegistryObject<Item> BUTTERFLY_NET = ITEMS.register(ButterflyNetItem.NAME,
             () -> new ButterflyNetItem(new Item.Properties()
+                    .stacksTo(1)
                     .tab(CreativeModeTab.TAB_TOOLS)));
 
     //  Spawn eggs
