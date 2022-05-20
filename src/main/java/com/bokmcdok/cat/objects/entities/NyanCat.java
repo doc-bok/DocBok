@@ -94,6 +94,8 @@ public class NyanCat extends Cat {
             addRainbowParticle(ParticleList.BLUE_RAINBOW_PARTICLE, 0.3f);
             addRainbowParticle(ParticleList.INDIGO_RAINBOW_PARTICLE, 0.2f);
             addRainbowParticle(ParticleList.VIOLET_RAINBOW_PARTICLE, 0.1f);
+
+            addStarParticle();
         }
 
         super.aiStep();
@@ -145,6 +147,17 @@ public class NyanCat extends Cat {
                 (getX() - xOld - lookVector.x) * 50f,
                 0f,
                 (getZ() - zOld - lookVector.z) * 50f);
+    }
+
+    /**
+     * Adds a start particle that floats around Nyan Cat.
+     */
+    private void addStarParticle() {
+        level.addParticle(ParticleList.STAR_PARTICLE.get(),
+                xOld + this.random.nextDouble() - 0.5D,
+                yOld + this.random.nextDouble() - 0.5D,
+                zOld + this.random.nextDouble() - 0.5D,
+                0f, 0f, 0f);
     }
 
     /**

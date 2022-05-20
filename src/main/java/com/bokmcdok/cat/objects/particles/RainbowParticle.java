@@ -69,7 +69,7 @@ public class RainbowParticle extends TextureSheetParticle {
      * Factory to create a rainbow particle.
      */
     @OnlyIn(Dist.CLIENT)
-    public static abstract class Factory implements ParticleProvider<SimpleParticleType> {
+    public static abstract class Provider implements ParticleProvider<SimpleParticleType> {
 
         //  The sprite set to use for the particle.
         private final SpriteSet spriteSet;
@@ -82,7 +82,7 @@ public class RainbowParticle extends TextureSheetParticle {
          * Construction
          * @param sprite The sprite set to use
          */
-        public Factory(SpriteSet sprite) {
+        public Provider(SpriteSet sprite) {
             spriteSet = sprite;
             r = 1;
             g = 1;
@@ -115,7 +115,7 @@ public class RainbowParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class RedFactory extends Factory {
+    public static class RedFactory extends Provider {
 
         /**
          * Construction
@@ -130,7 +130,7 @@ public class RainbowParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class OrangeFactory extends Factory {
+    public static class OrangeFactory extends Provider {
 
         /**
          * Construction
@@ -145,7 +145,7 @@ public class RainbowParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class YellowFactory extends Factory {
+    public static class YellowFactory extends Provider {
 
         /**
          * Construction
@@ -160,7 +160,7 @@ public class RainbowParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class GreenFactory extends Factory {
+    public static class GreenFactory extends Provider {
 
         /**
          * Construction
@@ -175,7 +175,7 @@ public class RainbowParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class BlueFactory extends Factory {
+    public static class BlueFactory extends Provider {
 
         /**
          * Construction
@@ -190,7 +190,7 @@ public class RainbowParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class IndigoFactory extends Factory {
+    public static class IndigoFactory extends Provider {
 
         /**
          * Construction
@@ -205,7 +205,7 @@ public class RainbowParticle extends TextureSheetParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class VioletFactory extends Factory {
+    public static class VioletFactory extends Provider {
 
         /**
          * Construction

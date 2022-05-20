@@ -32,6 +32,10 @@ public class ParticleList {
     public static final RegistryObject<SimpleParticleType> VIOLET_RAINBOW_PARTICLE =
             registerBasicParticle("violet_rainbow_particle", true);
 
+    //  Star particle for Nyan Cat
+    public static final RegistryObject<SimpleParticleType> STAR_PARTICLE =
+            registerBasicParticle("star", true);
+
     //  Helper method for registering basic particles
     private static RegistryObject<SimpleParticleType> registerBasicParticle(String location, boolean alwaysRender) {
         return PARTICLES.register(location, () -> new SimpleParticleType(alwaysRender));

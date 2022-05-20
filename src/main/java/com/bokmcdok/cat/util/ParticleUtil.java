@@ -3,6 +3,7 @@ package com.bokmcdok.cat.util;
 import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.lists.ParticleList;
 import com.bokmcdok.cat.objects.particles.RainbowParticle;
+import com.bokmcdok.cat.objects.particles.StarParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -22,6 +23,8 @@ public class ParticleUtil {
      */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerParticles(ParticleFactoryRegisterEvent event) {
+
+        //  Rainbow particles
         Minecraft.getInstance().particleEngine.register(ParticleList.RED_RAINBOW_PARTICLE.get(),
                 RainbowParticle.RedFactory::new);
         Minecraft.getInstance().particleEngine.register(ParticleList.ORANGE_RAINBOW_PARTICLE.get(),
@@ -36,5 +39,9 @@ public class ParticleUtil {
                 RainbowParticle.IndigoFactory::new);
         Minecraft.getInstance().particleEngine.register(ParticleList.VIOLET_RAINBOW_PARTICLE.get(),
                 RainbowParticle.VioletFactory::new);
+
+        //  Star Particle
+        Minecraft.getInstance().particleEngine.register(ParticleList.STAR_PARTICLE.get(),
+                StarParticle.Provider::new);
     }
 }
