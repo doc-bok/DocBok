@@ -1,4 +1,9 @@
 {
+  "advancements.butterfly.root.title": "Butterflies",
+  "advancements.butterfly.root.description": "Fluttering with colour",
+  "advancements.butterfly.catch_butterfly.title": "Butterfly Catcher",
+  "advancements.butterfly.catch_butterfly.description": "Catch a butterfly with a butterfly net",
+
   "item.cat.butterfly_net": "Butterfly Net",
   "item.cat.peacemaker_honey_bottle": "Peacemaker Honey Bottle",
 
