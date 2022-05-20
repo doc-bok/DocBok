@@ -3,8 +3,11 @@ package com.bokmcdok.cat.lists;
 import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.objects.entities.Butterfly;
 import com.bokmcdok.cat.objects.entities.NyanCat;
+import com.bokmcdok.cat.objects.items.PeacemakerHoneyBottleItem;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -20,6 +23,17 @@ public class ItemList {
 
     //  Some helpers for setting properties
     public static final Item.Properties MISC_ITEM_PROPERTIES = new Item.Properties().tab(CreativeModeTab.TAB_MISC);
+
+    //  Peacemaker Honey Bottle
+    //  - Gained by milking Peacemaker Cows
+    //  - Can be crafted into sugar
+    //  - Can be used to breed Peacemaker Butterflies
+    public static final RegistryObject<Item> PEACEMAKER_HONEY_BOTTLE = ITEMS.register(PeacemakerHoneyBottleItem.NAME,
+            () -> new PeacemakerHoneyBottleItem(new Item.Properties()
+                    .craftRemainder(Items.GLASS_BOTTLE)
+                    .food(Foods.HONEY_BOTTLE)
+                    .tab(CreativeModeTab.TAB_FOOD)
+                    .stacksTo(16)));
 
     //  Spawn eggs
     public static final RegistryObject<Item> BUTTERFLY_EGG = ITEMS.register(Butterfly.NAME,
