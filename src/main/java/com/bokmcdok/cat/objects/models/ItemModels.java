@@ -27,6 +27,11 @@ public class ItemModels extends ItemModelProvider {
      */
     @Override
     protected void registerModels() {
+
+        //  Items
+        withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_HONEY_BOTTLE.get().getRegistryName()).getPath(), mcLoc("item/peacemaker_honey_bottle"));
+
+        //  Spawn Eggs
         withExistingParent(Objects.requireNonNull(ItemList.BUTTERFLY_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.NYAN_CAT_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
     }
