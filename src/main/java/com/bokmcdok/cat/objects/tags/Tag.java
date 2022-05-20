@@ -1,4 +1,4 @@
-package com.bokmcdok.cat.objects.tag;
+package com.bokmcdok.cat.objects.tags;
 
 import com.bokmcdok.cat.supplier.RegistrySetSupplier;
 import com.bokmcdok.cat.tools.LazyValue;

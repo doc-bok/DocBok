@@ -1,7 +1,8 @@
 package com.bokmcdok.cat.lists;
 
 import com.bokmcdok.cat.CatMod;
-import com.bokmcdok.cat.objects.entity.NyanCatEntity;
+import com.bokmcdok.cat.objects.entities.Butterfly;
+import com.bokmcdok.cat.objects.entities.NyanCat;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.RegistryObject;
@@ -9,15 +10,21 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class EntityList {
-
     //  Our entity registry
     public static final DeferredRegister<EntityType<?>> ENTITIES =
             DeferredRegister.create(ForgeRegistries.ENTITIES, CatMod.MOD_ID);
 
     //  The Nyan Cat Entity
-    public static final RegistryObject<EntityType<NyanCatEntity>> NYAN_CAT =
-            ENTITIES.register(NyanCatEntity.NAME, () ->
-                    EntityType.Builder.of(NyanCatEntity::new, MobCategory.CREATURE)
+    public static final RegistryObject<EntityType<NyanCat>> NYAN_CAT =
+            ENTITIES.register(NyanCat.NAME, () ->
+                    EntityType.Builder.of(NyanCat::new, MobCategory.CREATURE)
                     .sized(0.3f, 0.4f)
-                    .build(NyanCatEntity.NAME));
+                    .build(NyanCat.NAME));
+
+    //  The butterfly entity
+    public static final RegistryObject<EntityType<Butterfly>> BUTTERFLY =
+            ENTITIES.register(Butterfly.NAME, () ->
+                    EntityType.Builder.of(Butterfly::new, MobCategory.AMBIENT)
+                            .sized(0.3f, 0.4f)
+                            .build(Butterfly.NAME));
 }

@@ -1,4 +1,4 @@
-package com.bokmcdok.cat.event_listener;
+package com.bokmcdok.cat.event_listeners;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.common.MinecraftForge;

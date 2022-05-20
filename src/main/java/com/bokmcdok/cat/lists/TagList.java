@@ -1,6 +1,6 @@
 package com.bokmcdok.cat.lists;
 
-import com.bokmcdok.cat.objects.tag.Tag;
+import com.bokmcdok.cat.objects.tags.Tag;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
