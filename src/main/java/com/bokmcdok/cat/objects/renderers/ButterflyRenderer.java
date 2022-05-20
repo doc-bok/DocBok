@@ -15,6 +15,7 @@ public class ButterflyRenderer extends MobRenderer<Butterfly, ButterflyModel> {
     //  The texture locations
     public static ResourceLocation[] TEXTURE = {
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_blue.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_nyan.png"),
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_purple.png"),
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_purple_trim.png"),
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_rainbow.png"),
