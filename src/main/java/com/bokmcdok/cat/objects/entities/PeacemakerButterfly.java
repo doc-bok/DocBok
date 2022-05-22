@@ -7,7 +7,11 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -35,16 +39,21 @@ public class PeacemakerButterfly extends Monster {
                                           @SuppressWarnings("unused") Random rng) {
         return level.getRawBrightness(position, 0) > 8;
     }
-
-    public PeacemakerButterfly(EntityType<? extends PeacemakerButterfly> type, Level level) {
-        super(type, level);
-    }
-
     /**
      * Create attributes for a butterfly.
      * @return Butterflies have only 3 health (1.5 hearts).
      */
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 3d);
+    }
+
+    public PeacemakerButterfly(EntityType<? extends PeacemakerButterfly> type, Level level) {
+        super(type, level);
+    }
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
     }
 }

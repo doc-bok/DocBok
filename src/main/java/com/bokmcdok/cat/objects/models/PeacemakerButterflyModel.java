@@ -29,13 +29,6 @@ public class PeacemakerButterflyModel extends HierarchicalModel<PeacemakerButter
     private final ModelPart head;
     private final ModelPart right_wing;
     private final ModelPart left_wing;
-    private final ModelPart legs;
-
-    public PeacemakerButterflyModel(ModelPart root) {
-        this.root = root;
-        this.head = root.getChild("head");
-        this.right_wing = root.getChild("right_wing");
-        this.left_wing = root.getChild("left_wing");
 
     /**
      * Create the model for the peacemaker butterfly
@@ -111,6 +104,11 @@ public class PeacemakerButterflyModel extends HierarchicalModel<PeacemakerButter
                           float ageInTicks,
                           float netHeadYaw,
                           float headPitch) {
+        //  Head
+        this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
+        this.head.xRot = headPitch * ((float)Math.PI / 180F);
+
+        //  Wings
         this.right_wing.zRot = Mth.sin(ageInTicks * 0.85F) * Mth.PI * 0.25F;
         this.left_wing.zRot = -right_wing.zRot;
 
