@@ -2,8 +2,6 @@ package com.bokmcdok.cat.objects.models;
 
 import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -14,20 +12,23 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The model for a Peacemaker butterfly.
+ */
 public class PeacemakerButterflyModel extends HierarchicalModel<PeacemakerButterfly> {
 
-    // This layer location should be baked with EntityRendererProvider.Context
-    // in the entity renderer and passed into this model's constructor
+    //  The layers used for the model
     public static final ModelLayerLocation LAYER_LOCATION =
             new ModelLayerLocation(new ResourceLocation(CatMod.MOD_ID, "peacemaker_butterfly"), "main");
 
+    //  The parts of the model
     private final ModelPart root;
     private final ModelPart head;
     private final ModelPart right_wing;
     private final ModelPart left_wing;
-    private final ModelPart body;
     private final ModelPart legs;
 
     public PeacemakerButterflyModel(ModelPart root) {
@@ -35,43 +36,74 @@ public class PeacemakerButterflyModel extends HierarchicalModel<PeacemakerButter
         this.head = root.getChild("head");
         this.right_wing = root.getChild("right_wing");
         this.left_wing = root.getChild("left_wing");
-        this.body = root.getChild("body");
-        this.legs = root.getChild("legs");
-    }
 
+    /**
+     * Create the model for the peacemaker butterfly
+     * @return The complete model
+     */
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-2.0F, -5.0F, -6.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(1.0F, 23.0F, -1.0F));
-
-        PartDefinition antannae = head.addOrReplaceChild("antennae", CubeListBuilder.create()
-                .texOffs(6, 2).addBox(-2.0F, -7.0F, -9.0F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 2).addBox(0.0F, -7.0F, -9.0F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        PartDefinition right_wing = partdefinition.addOrReplaceChild("right_wing", CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-12.0F, -5.0F, -6.0F, 10.0F, 0.0F, 17.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(1.0F, 23.0F, 0.0F));
-
-        PartDefinition left_wing = partdefinition.addOrReplaceChild("left_wing", CubeListBuilder.create()
-                .texOffs(0, 17).addBox(0.0F, -5.0F, -6.0F, 10.0F, 0.0F, 17.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(1.0F, 23.0F, 0.0F));
-
         PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create()
-                .texOffs(0, 24).addBox(-2.0F, -5.0F, -3.0F, 2.0F, 2.0F, 10.0F, new CubeDeformation(0.0F)),
+                        .texOffs(0, 24).addBox(-2.0F, -5.0F, -3.0F, 2.0F, 2.0F, 10.0F, new CubeDeformation(0.0F)),
                 PartPose.offset(1.0F, 23.0F, 0.0F));
 
-        PartDefinition legs = partdefinition.addOrReplaceChild("legs", CubeListBuilder.create()
-                .texOffs(0, 4).addBox(1.0F, -4.0F, -2.0F, 0.0F, 4.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 0).addBox(-1.0F, -4.0F, -2.0F, 0.0F, 4.0F, 8.0F, new CubeDeformation(0.0F)),
+        body.addOrReplaceChild("left_wing", CubeListBuilder.create()
+                        .texOffs(0, 17).addBox(0.0F, 0.0F, -6.0F, 10.0F, 0.0F, 17.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, -5.0F, 0.0F));
+
+        body.addOrReplaceChild("right_wing", CubeListBuilder.create()
+                        .texOffs(0, 0).addBox(-12.0F, 0.0F, -6.0F, 10.0F, 0.0F, 17.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, -5.0F, 0.0F));
+
+        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create()
+                        .texOffs(0, 0).addBox(-1.0F, -0.5F, -4.0F, 2.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(-1.0F, -4.5F, -3.0F));
+
+        head.addOrReplaceChild("antennae", CubeListBuilder.create()
+                        .texOffs(6, 2).addBox(-2.0F, -7.0F, -9.0F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F))
+                        .texOffs(0, 2).addBox(0.0F, -7.0F, -9.0F, 0.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(1.0F, 4.5F, 2.0F));
+
+        partdefinition.addOrReplaceChild("legs", CubeListBuilder.create()
+                        .texOffs(0, 4).addBox(1.0F, -4.0F, -2.0F, 0.0F, 4.0F, 8.0F, new CubeDeformation(0.0F))
+                        .texOffs(0, 0).addBox(-1.0F, -4.0F, -2.0F, 0.0F, 4.0F, 8.0F, new CubeDeformation(0.0F)),
                 PartPose.offset(0.0F, 24.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
+    /**
+     * Create a model
+     * @param root The root to attach the model to
+     */
+    public PeacemakerButterflyModel(ModelPart root) {
+        this.root = root;
+        ModelPart body = root.getChild("body");
+        this.head = body.getChild("head");
+        this.right_wing = body.getChild("right_wing");
+        this.left_wing = body.getChild("left_wing");
+    }
+
+    /**
+     * Get the root of the model
+     * @return The root to render
+     */
+    @Override
+    public @NotNull ModelPart root() {
+        return this.root;
+    }
+
+    /**
+     * Animate the model.
+     * @param entity The butterfly entity
+     * @param limbSwing Unused
+     * @param limbSwingAmount Unused
+     * @param ageInTicks The current age of the entity in ticks
+     * @param netHeadYaw unused
+     * @param headPitch unused
+     */
     @Override
     public void setupAnim(@NotNull PeacemakerButterfly entity,
                           float limbSwing,
@@ -79,27 +111,8 @@ public class PeacemakerButterflyModel extends HierarchicalModel<PeacemakerButter
                           float ageInTicks,
                           float netHeadYaw,
                           float headPitch) {
+        this.right_wing.zRot = Mth.sin(ageInTicks * 0.85F) * Mth.PI * 0.25F;
+        this.left_wing.zRot = -right_wing.zRot;
 
-    }
-
-    @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack,
-                               @NotNull VertexConsumer vertexConsumer,
-                               int packedLight,
-                               int packedOverlay,
-                               float red,
-                               float green,
-                               float blue,
-                               float alpha) {
-        head.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        right_wing.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        left_wing.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        legs.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-    }
-
-    @Override
-    public @NotNull ModelPart root() {
-        return this.root;
     }
 }

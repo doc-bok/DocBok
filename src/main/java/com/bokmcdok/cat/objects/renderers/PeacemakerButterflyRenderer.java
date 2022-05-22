@@ -1,7 +1,6 @@
 package com.bokmcdok.cat.objects.renderers;
 
 import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
-import com.bokmcdok.cat.objects.models.ButterflyModel;
 import com.bokmcdok.cat.objects.models.PeacemakerButterflyModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
