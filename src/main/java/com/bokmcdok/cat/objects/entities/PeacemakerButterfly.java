@@ -1,24 +1,39 @@
 package com.bokmcdok.cat.objects.entities;
 
+import com.bokmcdok.cat.objects.goals.FlyThroughVillageGoal;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.monster.ZombieVillager;
+import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -84,6 +99,64 @@ public class PeacemakerButterfly extends Monster {
     }
 
     /**
+     * Convert villagers and pillagers to Peacemaker mobs
+     * @param level The current level
+     * @param victim The entity just "killed"
+     */
+    @Override
+    public void killed(@NotNull ServerLevel level,
+                       @NotNull LivingEntity victim) {
+        super.killed(level, victim);
+        Difficulty difficulty = level.getDifficulty();
+        if (difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD) {
+            if (difficulty != Difficulty.HARD && this.random.nextBoolean()) {
+                return;
+            }
+
+            if (victim instanceof Villager villager &&
+                    ForgeEventFactory.canLivingConvert(victim, EntityType.ZOMBIE_VILLAGER, (x) -> {})) {
+                ZombieVillager zombieVillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
+                if  (zombieVillager != null) {
+                    zombieVillager.finalizeSpawn(level,
+                            level.getCurrentDifficultyAt(zombieVillager.blockPosition()),
+                            MobSpawnType.CONVERSION,
+                            new Zombie.ZombieGroupData(false, true),
+                            null);
+                    zombieVillager.setVillagerData(villager.getVillagerData());
+                    zombieVillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE).getValue());
+                    zombieVillager.setTradeOffers(villager.getOffers().createTag());
+                    zombieVillager.setVillagerXp(villager.getVillagerXp());
+                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(victim, zombieVillager);
+                    if (!this.isSilent()) {
+                        level.levelEvent(null, 1026, this.blockPosition(), 0);
+                    }
+
+                    this.remove(RemovalReason.DISCARDED);
+                }
+            }
+
+            if (victim instanceof AbstractIllager illager &&
+                    ForgeEventFactory.canLivingConvert(victim, EntityType.ZOMBIE, (x) -> {})) {
+                Zombie zombie = illager.convertTo(EntityType.ZOMBIE, false);
+                if  (zombie != null) {
+                    zombie.finalizeSpawn(level,
+                            level.getCurrentDifficultyAt(zombie.blockPosition()),
+                            MobSpawnType.CONVERSION,
+                            new Zombie.ZombieGroupData(false, true),
+                            null);
+                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(victim, zombie);
+                    if (!this.isSilent()) {
+                        level.levelEvent(null, 1026, this.blockPosition(), 0);
+                    }
+
+                    this.remove(RemovalReason.DISCARDED);
+                }
+            }
+        }
+
+    }
+
+    /**
      * Butterflies ignore fall damage.
      * @param yPos The current y-position of the butterfly.
      * @param onGround TRUE if the butterfly is on the ground.
@@ -116,13 +189,22 @@ public class PeacemakerButterfly extends Monster {
     protected void registerGoals() {
 
         //  Movement goals
-        this.goalSelector.addGoal(5, new FloatGoal(this));
-        //this.goalSelector.addGoal(6, new MoveThroughVillageGoal(this, 1.0D, true, 4, () -> false));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(6, new FlyThroughVillageGoal(this, 1.0D, false, 4, () -> false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
 
         //  Look at goals
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-    }
 
+        //  Attack goals
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
+
+        //  Targets
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(PeacemakerButterfly.class));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractIllager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+    }
 }
