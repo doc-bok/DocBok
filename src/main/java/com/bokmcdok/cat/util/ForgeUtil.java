@@ -11,10 +11,15 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
 
+/**
+ * Handle events on the Forge event bus
+ */
 @Mod.EventBusSubscriber(modid = CatMod.MOD_ID,
         bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeUtil {
-    private static Biome.BiomeCategory BUTTERFLY_BIOMES[] = {
+
+    //  Biomes where butterflies can spawn
+    private static final Biome.BiomeCategory[] BUTTERFLY_BIOMES = {
             Biome.BiomeCategory.TAIGA,
             Biome.BiomeCategory.JUNGLE,
             Biome.BiomeCategory.MESA,
@@ -22,15 +27,28 @@ public class ForgeUtil {
             Biome.BiomeCategory.SAVANNA,
             Biome.BiomeCategory.FOREST,
             Biome.BiomeCategory.RIVER,
-            Biome.BiomeCategory.SWAMP//,
-            //Biome.BiomeCategory.MUSHROOM
+            Biome.BiomeCategory.SWAMP
+    };
+
+    //  Non-overworld biomes
+    private static final Biome.BiomeCategory[] NON_OVERWORLD_BIOMES = {
+            Biome.BiomeCategory.THEEND,
+            Biome.BiomeCategory.NETHER
     };
 
     @SubscribeEvent
     public static void biomeLoading(BiomeLoadingEvent event) {
+
+        //  Butterflies
         if (Arrays.asList(BUTTERFLY_BIOMES).contains(event.getCategory())) {
             event.getSpawns().addSpawn(MobCategory.AMBIENT,
                     new MobSpawnSettings.SpawnerData(EntityList.BUTTERFLY.get(), 10, 3, 5));
+        }
+
+        //  Peacemaker butterflies
+        if (!Arrays.asList(NON_OVERWORLD_BIOMES).contains(event.getCategory())) {
+            event.getSpawns().addSpawn(MobCategory.MONSTER,
+                    new MobSpawnSettings.SpawnerData(EntityList.PEACEMAKER_BUTTERFLY.get(), 10, 1, 4));
         }
     }
 }

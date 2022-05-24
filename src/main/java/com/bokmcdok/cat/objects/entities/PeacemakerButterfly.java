@@ -31,21 +31,33 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Random;
 
+/**
+ * A peacemaker butterfly
+ */
 public class PeacemakerButterfly extends Monster {
 
+    //  The name of the entity, used to register the entity
     public static final String NAME = "peacemaker_butterfly";
 
+    //  "Cave" biomes where the height limit is ignored
+    private static final Biome.BiomeCategory[] CAVE_BIOMES = {
+            Biome.BiomeCategory.MOUNTAIN,
+            Biome.BiomeCategory.EXTREME_HILLS,
+            Biome.BiomeCategory.UNDERGROUND
+    };
 
     /**
-     * Defines the spawn rules for butterflies: they can spawn anywhere the
-     * light level is above 8.
+     * Defines the spawn rules for peacemaker butterflies: they generally spawn
+     * underground or in mountain caves
      * @param entityType The entity type to spawn.
      * @param level The current level.
      * @param spawnType The type of spawn.
@@ -53,12 +65,27 @@ public class PeacemakerButterfly extends Monster {
      * @param rng The random number generator.
      * @return True if the butterfly can spawn.
      */
-    public static boolean checkSpawnRules(@SuppressWarnings("unused") EntityType<PeacemakerButterfly> entityType,
+    @SuppressWarnings("deprecation")
+    public static boolean checkSpawnRules(EntityType<PeacemakerButterfly> entityType,
                                           LevelAccessor level,
-                                          @SuppressWarnings("unused") MobSpawnType spawnType,
+                                          MobSpawnType spawnType,
                                           BlockPos position,
-                                          @SuppressWarnings("unused") Random rng) {
-        return level.getRawBrightness(position, 0) > 8;
+                                          Random rng) {
+        Biome.BiomeCategory biomeCategory = Biome.getBiomeCategory(level.getBiome(position));
+        if (!Arrays.asList(CAVE_BIOMES).contains(biomeCategory)) {
+            if (position.getY() > level.getSeaLevel()) {
+                return false;
+            }
+        }
+
+        int i = level.getMaxLocalRawBrightness(position);
+        int j = 4;
+
+        if (rng.nextBoolean()) {
+            return false;
+        }
+
+        return i <= rng.nextInt(j) && checkMobSpawnRules(entityType, level, spawnType, position, rng);
     }
 
     /**
