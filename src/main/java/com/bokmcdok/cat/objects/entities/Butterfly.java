@@ -63,11 +63,11 @@ public class Butterfly extends AmbientCreature {
      * @param rng The random number generator.
      * @return True if the butterfly can spawn.
      */
-    public static boolean checkButterflySpawnRules(@SuppressWarnings("unused") EntityType<Butterfly> entityType,
-                                                   LevelAccessor level,
-                                                   @SuppressWarnings("unused") MobSpawnType spawnType,
-                                                   BlockPos position,
-                                                   @SuppressWarnings("unused") Random rng) {
+    public static boolean checkSpawnRules(@SuppressWarnings("unused") EntityType<Butterfly> entityType,
+                                          LevelAccessor level,
+                                          @SuppressWarnings("unused") MobSpawnType spawnType,
+                                          BlockPos position,
+                                          @SuppressWarnings("unused") Random rng) {
         return level.getRawBrightness(position, 0) > 8;
     }
 

@@ -2,6 +2,7 @@ package com.bokmcdok.cat.objects.items;
 
 import com.bokmcdok.cat.lists.EntityList;
 import com.bokmcdok.cat.objects.entities.Butterfly;
+import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -53,6 +54,17 @@ public class ButterflyNetItem extends Item {
                 return true;
             }
         }
+        if (entity.getType() == EntityList.PEACEMAKER_BUTTERFLY.get()) {
+            CompoundTag tag = stack.getOrCreateTag();
+            if (tag.getInt("CustomModelData") == 0) {
+                tag.putInt("CustomModelData", 9999);
+                entity.discard();
+
+                player.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 1F, 1F);
+
+                return true;
+            }
+        }
 
         return super.onLeftClickEntity(stack, player, entity);
     }
@@ -73,19 +85,36 @@ public class ButterflyNetItem extends Item {
             int state = tag.getInt("CustomModelData");
             if (state != 0) {
                 if (level instanceof ServerLevel) {
-                    Butterfly butterfly = EntityList.BUTTERFLY.get().create(player.level);
-                    if (butterfly != null) {
-                        butterfly.copyPosition(player);
-                        butterfly.finalizeSpawn((ServerLevel) level,
-                                level.getCurrentDifficultyAt(player.getOnPos()),
-                                MobSpawnType.NATURAL,
-                                null,
-                                null);
-                        butterfly.setVariant(state - 1);
+                    if (state == 9999) {
+                        PeacemakerButterfly peacemakerButterfly =
+                                EntityList.PEACEMAKER_BUTTERFLY.get().create(player.level);
+                        if (peacemakerButterfly != null) {
+                            peacemakerButterfly.copyPosition(player);
+                            peacemakerButterfly.finalizeSpawn((ServerLevel) level,
+                                    level.getCurrentDifficultyAt(player.getOnPos()),
+                                    MobSpawnType.NATURAL,
+                                    null,
+                                    null);
 
-                        player.level.addFreshEntity(butterfly);
+                            player.level.addFreshEntity(peacemakerButterfly);
 
-                        tag.putInt("CustomModelData", 0);
+                            tag.putInt("CustomModelData", 0);
+                        }
+                    } else {
+                        Butterfly butterfly = EntityList.BUTTERFLY.get().create(player.level);
+                        if (butterfly != null) {
+                            butterfly.copyPosition(player);
+                            butterfly.finalizeSpawn((ServerLevel) level,
+                                    level.getCurrentDifficultyAt(player.getOnPos()),
+                                    MobSpawnType.NATURAL,
+                                    null,
+                                    null);
+                            butterfly.setVariant(state - 1);
+
+                            player.level.addFreshEntity(butterfly);
+
+                            tag.putInt("CustomModelData", 0);
+                        }
                     }
                 } else {
                     player.playSound(SoundEvents.PLAYER_ATTACK_WEAK, 1F, 1F);

@@ -12,6 +12,7 @@
     { "predicate": { "custom_model_data": 6 }, "model": "cat:item/butterfly_net_full_red" },
     { "predicate": { "custom_model_data": 7 }, "model": "cat:item/butterfly_net_full_seethru" },
     { "predicate": { "custom_model_data": 8 }, "model": "cat:item/butterfly_net_full_sword" },
-    { "predicate": { "custom_model_data": 9 }, "model": "cat:item/butterfly_net_full_white" }
+    { "predicate": { "custom_model_data": 9 }, "model": "cat:item/butterfly_net_full_white" },
+    { "predicate": { "custom_model_data": 9999 }, "model": "cat:item/butterfly_net_full_peacemaker" }
   ]
 }

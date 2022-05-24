@@ -1,0 +1,36 @@
+{
+  "parent": "cat:butterfly/catch_butterfly",
+  "display": {
+    "icon": {
+      "item": "cat:butterfly_net"
+    },
+    "title": {
+      "translate": "advancements.butterfly.catch_peacemaker_butterfly.title"
+    },
+    "description": {
+      "translate": "advancements.butterfly.catch_peacemaker_butterfly.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "caught": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "cat:butterfly_net",
+            "nbt": "{CustomModelData:9999}"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "caught"
+    ]
+  ]
+}

@@ -2,8 +2,6 @@ package com.bokmcdok.cat.objects.models;
 
 import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.objects.entities.Butterfly;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -96,21 +94,6 @@ public class ButterflyModel extends HierarchicalModel<Butterfly> {
         this.body.yRot = 0.7853982F + Mth.cos(ageInTicks * 0.1F) * 0.15F;
         this.right_wing.xRot = Mth.sin(ageInTicks * 1.3F) * Mth.PI * 0.25F;
         this.left_wing.xRot = -right_wing.xRot;
-    }
-
-    /**
-     * Renders the body
-     */
-    @Override
-    public void renderToBuffer(@NotNull PoseStack poseStack,
-                               @NotNull VertexConsumer vertexConsumer,
-                               int packedLight,
-                               int packedOverlay,
-                               float red,
-                               float green,
-                               float blue,
-                               float alpha) {
-        body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     /**
