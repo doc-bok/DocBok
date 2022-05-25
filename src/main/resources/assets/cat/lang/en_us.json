@@ -8,10 +8,25 @@
   "advancements.butterfly.catch_peacemaker_butterfly.title": "Peace Catcher",
   "advancements.butterfly.catch_peacemaker_butterfly.description": "Catch a peacemaker butterfly",
 
+  "entity.cat.peacemaker_villager.armorer": "Armorer",
+  "entity.cat.peacemaker_villager.butcher": "Butcher",
+  "entity.cat.peacemaker_villager.cartographer": "Cartographer",
+  "entity.cat.peacemaker_villager.cleric": "Cleric",
+  "entity.cat.peacemaker_villager.farmer": "Farmer",
+  "entity.cat.peacemaker_villager.fisherman": "Fisherman",
+  "entity.cat.peacemaker_villager.fletcher": "Fletcher",
+  "entity.cat.peacemaker_villager.leatherworker": "Leatherworker",
+  "entity.cat.peacemaker_villager.librarian": "Librarian",
+  "entity.cat.peacemaker_villager.mason": "Mason",
+  "entity.cat.peacemaker_villager.shepherd": "Shepherd",
+  "entity.cat.peacemaker_villager.toolsmith": "Toolsmith",
+  "entity.cat.peacemaker_villager.weaponsmith": "Weaponsmith",
+
   "item.cat.butterfly_net": "Butterfly Net",
   "item.cat.peacemaker_honey_bottle": "Peacemaker Honey Bottle",
 
   "item.cat.butterfly": "Butterfly",
   "item.cat.nyan_cat": "Nyan Cat",
-  "item.cat.peacemaker_butterfly": "Peacemaker Butterfly"
+  "item.cat.peacemaker_butterfly": "Peacemaker Butterfly",
+  "item.cat.peacemaker_villager": "Peacemaker Villager"
 }
