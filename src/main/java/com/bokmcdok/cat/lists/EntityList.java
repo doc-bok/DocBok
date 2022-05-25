@@ -6,6 +6,7 @@ import com.bokmcdok.cat.objects.entities.NyanCat;
 import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
 import com.bokmcdok.cat.objects.entities.PeacemakerEvoker;
 import com.bokmcdok.cat.objects.entities.PeacemakerIllusioner;
+import com.bokmcdok.cat.objects.entities.PeacemakerPillager;
 import com.bokmcdok.cat.objects.entities.PeacemakerVillager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -54,6 +55,14 @@ public class EntityList {
                             .sized(0.6f, 1.95f)
                             .clientTrackingRange(8)
                             .build(PeacemakerIllusioner.NAME));
+
+    //  Peacemaker Pillager
+    public static final RegistryObject<EntityType<PeacemakerPillager>> PEACEMAKER_PILLAGER =
+            ENTITIES.register(PeacemakerPillager.NAME, () ->
+                    EntityType.Builder.of(PeacemakerPillager::new, MobCategory.MONSTER)
+                            .sized(0.6f, 1.95f)
+                            .clientTrackingRange(8)
+                            .build(PeacemakerPillager.NAME));
 
     //  Peacemaker Villager
     public static final RegistryObject<EntityType<PeacemakerVillager>> PEACEMAKER_VILLAGER =
