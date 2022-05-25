@@ -6,24 +6,25 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
-import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class PeacemakerEvoker extends Evoker {
+public class PeacemakerIllusioner extends Illusioner {
 
     //  The name used for registration
-    public static final String NAME = "peacemaker_evoker";
+    public static final String NAME = "peacemaker_illusioner";
 
     /**
-     * Create a peacemaker evoker
+     * Create a peacemaker illusioner
      * @param type The entity type
      * @param level The current level
      */
-    public PeacemakerEvoker(EntityType<? extends PeacemakerEvoker> type, Level level) {
+    public PeacemakerIllusioner(EntityType<? extends  PeacemakerIllusioner> type,
+                                Level level) {
         super(type, level);
     }
 
@@ -51,6 +52,7 @@ public class PeacemakerEvoker extends Evoker {
                 .setUnseenMemoryTicks(300));
         this.targetSelector.addGoal(3, (new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false,
                 EntityUtil::isNotPeacemakerTarget)).setUnseenMemoryTicks(300));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false)
+                .setUnseenMemoryTicks(300));
     }
 }

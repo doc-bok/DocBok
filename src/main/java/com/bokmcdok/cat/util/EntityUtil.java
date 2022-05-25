@@ -6,6 +6,7 @@ import com.bokmcdok.cat.objects.entities.NyanCat;
 import com.bokmcdok.cat.lists.EntityList;
 import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
 import com.bokmcdok.cat.objects.entities.PeacemakerEvoker;
+import com.bokmcdok.cat.objects.entities.PeacemakerIllusioner;
 import com.bokmcdok.cat.objects.entities.PeacemakerVillager;
 import com.bokmcdok.cat.objects.models.ButterflyModel;
 import com.bokmcdok.cat.objects.models.PeacemakerButterflyModel;
@@ -13,12 +14,14 @@ import com.bokmcdok.cat.objects.renderers.ButterflyRenderer;
 import com.bokmcdok.cat.objects.renderers.PeacemakerButterflyRenderer;
 import net.minecraft.client.renderer.entity.CatRenderer;
 import net.minecraft.client.renderer.entity.EvokerRenderer;
+import net.minecraft.client.renderer.entity.IllusionerRenderer;
 import net.minecraft.client.renderer.entity.VillagerRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -39,10 +42,11 @@ public class EntityUtil {
      * @param entity The entity to check
      * @return True if the entity is a butterfly host
      */
-    public static boolean isPeacemakerTarget(LivingEntity entity) {
-        return entity instanceof PeacemakerButterfly ||
+    public static boolean isNotPeacemakerTarget(LivingEntity entity) {
+        return !(entity instanceof PeacemakerButterfly ||
                 entity instanceof PeacemakerEvoker ||
-                entity instanceof PeacemakerVillager;
+                entity instanceof PeacemakerIllusioner ||
+                entity instanceof PeacemakerVillager);
     }
 
     /**
@@ -56,6 +60,7 @@ public class EntityUtil {
         event.registerEntityRenderer(EntityList.BUTTERFLY.get(), ButterflyRenderer::new);
         event.registerEntityRenderer(EntityList.NYAN_CAT.get(), CatRenderer::new);
         event.registerEntityRenderer(EntityList.PEACEMAKER_EVOKER.get(), EvokerRenderer::new);
+        event.registerEntityRenderer(EntityList.PEACEMAKER_ILLUSIONER.get(), IllusionerRenderer::new);
         event.registerEntityRenderer(EntityList.PEACEMAKER_VILLAGER.get(), VillagerRenderer::new);
     }
 
@@ -68,6 +73,7 @@ public class EntityUtil {
         event.put(EntityList.BUTTERFLY.get(), Butterfly.createAttributes().build());
         event.put(EntityList.PEACEMAKER_BUTTERFLY.get(), PeacemakerButterfly.createAttributes().build());
         event.put(EntityList.PEACEMAKER_EVOKER.get(), Evoker.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_ILLUSIONER.get(), Illusioner.createAttributes().build());
         event.put(EntityList.PEACEMAKER_VILLAGER.get(), Villager.createAttributes().build());
     }
 
@@ -96,6 +102,11 @@ public class EntityUtil {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Evoker::checkMobSpawnRules);
+
+        SpawnPlacements.register(EntityList.PEACEMAKER_ILLUSIONER.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Illusioner::checkMobSpawnRules);
 
         SpawnPlacements.register(EntityList.PEACEMAKER_VILLAGER.get(),
                 SpawnPlacements.Type.ON_GROUND,

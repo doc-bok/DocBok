@@ -32,6 +32,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
@@ -211,6 +212,8 @@ public class PeacemakerButterfly extends Monster {
             if (victim instanceof AbstractIllager illager) {
                 if (illager instanceof Evoker) {
                     convertTo(level, illager, EntityList.PEACEMAKER_EVOKER.get());
+                } else if (illager instanceof Illusioner) {
+                    convertTo(level, illager, EntityList.PEACEMAKER_ILLUSIONER.get());
                 } else {
                     convertTo(level, illager, EntityType.ZOMBIE);
                 }
@@ -271,9 +274,9 @@ public class PeacemakerButterfly extends Monster {
                 .setAlertOthers(PeacemakerEvoker.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractIllager.class, false,
-                EntityUtil::isPeacemakerTarget));
+                EntityUtil::isNotPeacemakerTarget));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false,
-                EntityUtil::isPeacemakerTarget));
+                EntityUtil::isNotPeacemakerTarget));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
 

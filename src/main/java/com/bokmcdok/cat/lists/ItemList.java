@@ -5,6 +5,7 @@ import com.bokmcdok.cat.objects.entities.Butterfly;
 import com.bokmcdok.cat.objects.entities.NyanCat;
 import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
 import com.bokmcdok.cat.objects.entities.PeacemakerEvoker;
+import com.bokmcdok.cat.objects.entities.PeacemakerIllusioner;
 import com.bokmcdok.cat.objects.entities.PeacemakerVillager;
 import com.bokmcdok.cat.objects.items.ButterflyNetItem;
 import com.bokmcdok.cat.objects.items.PeacemakerHoneyBottleItem;
@@ -55,6 +56,8 @@ public class ItemList {
             () -> new ForgeSpawnEggItem(EntityList.NYAN_CAT, 0xff35c8, 0xffff00, MISC_ITEM_PROPERTIES));
     public static final RegistryObject<Item> PEACEMAKER_EVOKER_EGG = ITEMS.register(PeacemakerEvoker.NAME,
             () -> new ForgeSpawnEggItem(EntityList.PEACEMAKER_EVOKER, 9804699, 0xc1d4e7, MISC_ITEM_PROPERTIES));
+    public static final RegistryObject<Item> PEACEMAKER_ILLUSIONER_EGG = ITEMS.register(PeacemakerIllusioner.NAME,
+            () -> new ForgeSpawnEggItem(EntityList.PEACEMAKER_ILLUSIONER, 9804699, 0xc1d4e7, MISC_ITEM_PROPERTIES));
     public static final RegistryObject<Item> PEACEMAKER_VILLAGER_EGG = ITEMS.register(PeacemakerVillager.NAME,
             () -> new ForgeSpawnEggItem(EntityList.PEACEMAKER_VILLAGER, 5651507, 0xc1d4e7, MISC_ITEM_PROPERTIES));
 }
