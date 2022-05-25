@@ -1,5 +1,6 @@
 package com.bokmcdok.cat.objects.entities;
 
+import com.bokmcdok.cat.lists.EntityList;
 import com.bokmcdok.cat.lists.ItemList;
 import com.bokmcdok.cat.objects.goals.FlyThroughVillageGoal;
 import net.minecraft.core.BlockPos;
@@ -7,7 +8,10 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -27,12 +31,12 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
@@ -145,22 +149,39 @@ public class PeacemakerButterfly extends Monster {
             }
 
             if (victim instanceof Villager villager &&
-                    ForgeEventFactory.canLivingConvert(victim, EntityType.ZOMBIE_VILLAGER, (x) -> {})) {
-                ZombieVillager zombieVillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER, false);
-                if  (zombieVillager != null) {
-                    zombieVillager.finalizeSpawn(level,
-                            level.getCurrentDifficultyAt(zombieVillager.blockPosition()),
-                            MobSpawnType.CONVERSION,
-                            new Zombie.ZombieGroupData(false, true),
-                            null);
-                    zombieVillager.setVillagerData(villager.getVillagerData());
-                    zombieVillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE).getValue());
-                    zombieVillager.setTradeOffers(villager.getOffers().createTag());
-                    zombieVillager.setVillagerXp(villager.getVillagerXp());
-                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(victim, zombieVillager);
-                    if (!this.isSilent()) {
-                        level.levelEvent(null, 1026, this.blockPosition(), 0);
+                    ForgeEventFactory.canLivingConvert(victim, EntityList.PEACEMAKER_VILLAGER.get(), (x) -> {})) {
+                PeacemakerVillager peacemakerVillager = villager.convertTo(EntityList.PEACEMAKER_VILLAGER.get(), false);
+                if (peacemakerVillager != null) {
+                    for (EquipmentSlot equipmentslot : EquipmentSlot.values()) {
+                        ItemStack itemstack = villager.getItemBySlot(equipmentslot);
+                        if (!itemstack.isEmpty()) {
+                            if (EnchantmentHelper.hasBindingCurse(itemstack)) {
+                                peacemakerVillager.getSlot(equipmentslot.getIndex() + 300).set(itemstack);
+                            } else {
+                                double d0 = this.getEquipmentDropChance(equipmentslot);
+                                if (d0 > 1.0D) {
+                                    villager.spawnAtLocation(itemstack);
+                                }
+                            }
+                        }
                     }
+
+                    peacemakerVillager.setVillagerData(villager.getVillagerData());
+                    peacemakerVillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE).getValue());
+                    peacemakerVillager.setOffers(villager.getOffers());
+                    peacemakerVillager.setVillagerXp(villager.getVillagerXp());
+                    peacemakerVillager.finalizeSpawn(level,
+                            level.getCurrentDifficultyAt(peacemakerVillager.blockPosition()),
+                            MobSpawnType.CONVERSION,
+                            null,
+                            null);
+
+                    peacemakerVillager.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+                    if (!this.isSilent()) {
+                        level.levelEvent(null, 1027, peacemakerVillager.blockPosition(), 0);
+                    }
+
+                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(villager, peacemakerVillager);
 
                     this.remove(RemovalReason.DISCARDED);
                 }
@@ -238,7 +259,8 @@ public class PeacemakerButterfly extends Monster {
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(PeacemakerButterfly.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractIllager.class, false));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false,
+                (x) -> !(x instanceof PeacemakerVillager)));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
 }

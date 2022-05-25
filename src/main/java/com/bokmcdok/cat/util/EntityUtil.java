@@ -10,9 +10,11 @@ import com.bokmcdok.cat.objects.models.PeacemakerButterflyModel;
 import com.bokmcdok.cat.objects.renderers.ButterflyRenderer;
 import com.bokmcdok.cat.objects.renderers.PeacemakerButterflyRenderer;
 import net.minecraft.client.renderer.entity.CatRenderer;
+import net.minecraft.client.renderer.entity.VillagerRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -37,6 +39,7 @@ public class EntityUtil {
         event.registerEntityRenderer(EntityList.PEACEMAKER_BUTTERFLY.get(), PeacemakerButterflyRenderer::new);
         event.registerEntityRenderer(EntityList.BUTTERFLY.get(), ButterflyRenderer::new);
         event.registerEntityRenderer(EntityList.NYAN_CAT.get(), CatRenderer::new);
+        event.registerEntityRenderer(EntityList.PEACEMAKER_VILLAGER.get(), VillagerRenderer::new);
     }
 
     /**
@@ -47,6 +50,7 @@ public class EntityUtil {
         event.put(EntityList.NYAN_CAT.get(), NyanCat.createAttributes().build());
         event.put(EntityList.BUTTERFLY.get(), Butterfly.createAttributes().build());
         event.put(EntityList.PEACEMAKER_BUTTERFLY.get(), PeacemakerButterfly.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_VILLAGER.get(), Villager.createAttributes().build());
     }
 
     /**
@@ -69,6 +73,11 @@ public class EntityUtil {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 PeacemakerButterfly::checkSpawnRules);
+
+        SpawnPlacements.register(EntityList.PEACEMAKER_VILLAGER.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Villager::checkMobSpawnRules);
     }
 
     /**
