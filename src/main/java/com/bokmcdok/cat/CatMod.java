@@ -1,5 +1,6 @@
 package com.bokmcdok.cat;
 
+import com.bokmcdok.cat.event_listeners.EntityEventListener;
 import com.bokmcdok.cat.lists.ItemList;
 import com.bokmcdok.cat.lists.ParticleList;
 import com.bokmcdok.cat.event_listeners.CatEventListener;
@@ -30,6 +31,7 @@ public class CatMod
         MinecraftForge.EVENT_BUS.register(this);
 
         //  Event listeners
+        new EntityEventListener();
         new CatEventListener();
 
         // Lists

@@ -1,13 +1,11 @@
 package com.bokmcdok.cat.objects.entities;
 
-import com.bokmcdok.cat.lists.EntityList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.VillagerGoalPackages;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -42,18 +40,7 @@ public class PeacemakerVillager extends Villager {
     public void die(@NotNull DamageSource damageSource) {
         super.die(damageSource);
 
-        if (!this.level.isClientSide()) {
-            PeacemakerButterfly butterfly = EntityList.PEACEMAKER_BUTTERFLY.get().create(this.level);
-            if (butterfly != null) {
-                butterfly.copyPosition(this);
-                butterfly.finalizeSpawn((ServerLevel) this.level,
-                        butterfly.level.getCurrentDifficultyAt(butterfly.getOnPos()),
-                        MobSpawnType.CONVERSION,
-                        null,
-                        null);
-                this.level.addFreshEntity(butterfly);
-            }
-        }
+        PeacemakerButterfly.respawn(this);
     }
 
     /**

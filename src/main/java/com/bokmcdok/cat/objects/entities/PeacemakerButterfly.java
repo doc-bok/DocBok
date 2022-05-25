@@ -3,6 +3,7 @@ package com.bokmcdok.cat.objects.entities;
 import com.bokmcdok.cat.lists.EntityList;
 import com.bokmcdok.cat.lists.ItemList;
 import com.bokmcdok.cat.objects.goals.FlyThroughVillageGoal;
+import com.bokmcdok.cat.util.EntityUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
@@ -13,6 +14,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -29,8 +31,8 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.AbstractIllager;
+import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -105,6 +107,25 @@ public class PeacemakerButterfly extends Monster {
                 .add(Attributes.MAX_HEALTH, 6.0D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
                 .add(Attributes.FLYING_SPEED, 0.9D);
+    }
+
+    /**
+     * Respawns a peacemaker butterfly after its host has died
+     * @param entity The host entity
+     */
+    public static void respawn(LivingEntity entity) {
+        if (!entity.level.isClientSide()) {
+            PeacemakerButterfly butterfly = EntityList.PEACEMAKER_BUTTERFLY.get().create(entity.level);
+            if (butterfly != null) {
+                butterfly.copyPosition(entity);
+                butterfly.finalizeSpawn((ServerLevel) entity.level,
+                        butterfly.level.getCurrentDifficultyAt(butterfly.getOnPos()),
+                        MobSpawnType.CONVERSION,
+                        null,
+                        null);
+                entity.level.addFreshEntity(butterfly);
+            }
+        }
     }
 
     /**
@@ -187,25 +208,14 @@ public class PeacemakerButterfly extends Monster {
                 }
             }
 
-            if (victim instanceof AbstractIllager illager &&
-                    ForgeEventFactory.canLivingConvert(victim, EntityType.ZOMBIE, (x) -> {})) {
-                Zombie zombie = illager.convertTo(EntityType.ZOMBIE, false);
-                if  (zombie != null) {
-                    zombie.finalizeSpawn(level,
-                            level.getCurrentDifficultyAt(zombie.blockPosition()),
-                            MobSpawnType.CONVERSION,
-                            new Zombie.ZombieGroupData(false, true),
-                            null);
-                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(victim, zombie);
-                    if (!this.isSilent()) {
-                        level.levelEvent(null, 1026, this.blockPosition(), 0);
-                    }
-
-                    this.remove(RemovalReason.DISCARDED);
+            if (victim instanceof AbstractIllager illager) {
+                if (illager instanceof Evoker) {
+                    convertTo(level, illager, EntityList.PEACEMAKER_EVOKER.get());
+                } else {
+                    convertTo(level, illager, EntityType.ZOMBIE);
                 }
             }
         }
-
     }
 
     /**
@@ -256,11 +266,42 @@ public class PeacemakerButterfly extends Monster {
         this.goalSelector.addGoal(1, new TemptGoal(this, 1.25D, Ingredient.of(ItemList.PEACEMAKER_HONEY_BOTTLE.get()), false));
 
         //  Targets
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setAlertOthers(PeacemakerButterfly.class));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this))
+                .setAlertOthers(PeacemakerButterfly.class)
+                .setAlertOthers(PeacemakerEvoker.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractIllager.class, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractIllager.class, false,
+                EntityUtil::isPeacemakerTarget));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false,
-                (x) -> !(x instanceof PeacemakerVillager)));
+                EntityUtil::isPeacemakerTarget));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
+    }
+
+    /**
+     * Convert the entity to one with a butterfly host
+     * @param level The current level
+     * @param illager The illager to convert
+     * @param type The entity type
+     * @param <T> The entity class
+     */
+    private <T extends Mob> void convertTo(ServerLevel level,
+                                           AbstractIllager illager,
+                                           EntityType<T> type) {
+        if (ForgeEventFactory.canLivingConvert(illager, type, (x) -> {})) {
+            T newMob = illager.convertTo(type, false);
+            if (newMob != null) {
+                newMob.finalizeSpawn(level,
+                        level.getCurrentDifficultyAt(newMob.blockPosition()),
+                        MobSpawnType.CONVERSION,
+                        null,
+                        null);
+                net.minecraftforge.event.ForgeEventFactory.onLivingConvert(illager, newMob);
+                if (!this.isSilent()) {
+                    level.levelEvent(null, 1026, this.blockPosition(), 0);
+                }
+
+                this.remove(RemovalReason.DISCARDED);
+            }
+        }
     }
 }
