@@ -8,6 +8,7 @@ import com.bokmcdok.cat.objects.entities.PeacemakerEvoker;
 import com.bokmcdok.cat.objects.entities.PeacemakerIllusioner;
 import com.bokmcdok.cat.objects.entities.PeacemakerPillager;
 import com.bokmcdok.cat.objects.entities.PeacemakerVillager;
+import com.bokmcdok.cat.objects.items.BottledButterflyIItem;
 import com.bokmcdok.cat.objects.items.ButterflyNetItem;
 import com.bokmcdok.cat.objects.items.PeacemakerHoneyBottleItem;
 import net.minecraft.world.food.Foods;
@@ -47,6 +48,12 @@ public class ItemList {
             () -> new ButterflyNetItem(new Item.Properties()
                     .stacksTo(1)
                     .tab(CreativeModeTab.TAB_TOOLS)));
+
+    //  Bottled butterfly
+    public static final RegistryObject<Item> BOTTLED_BUTTERFLY = ITEMS.register(BottledButterflyIItem.NAME,
+            () -> new BottledButterflyIItem(new Item.Properties()
+                    .stacksTo(1)
+                    .tab(CreativeModeTab.TAB_MISC)));
 
     //  Spawn eggs
     public static final RegistryObject<Item> PEACEMAKER_BUTTERFLY_EGG = ITEMS.register(PeacemakerButterfly.NAME,

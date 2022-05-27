@@ -1,15 +1,14 @@
 package com.bokmcdok.cat.objects.items;
 
 import com.bokmcdok.cat.lists.EntityList;
+import com.bokmcdok.cat.lists.ItemList;
 import com.bokmcdok.cat.objects.entities.Butterfly;
-import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
+import com.bokmcdok.cat.util.ItemUtil;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +30,27 @@ public class ButterflyNetItem extends Item {
      */
     public ButterflyNetItem(Properties properties) {
         super(properties);
+    }
+
+    /**
+     * Return an empty net when used in a crafting recipe
+     * @param itemStack The current ItemStack
+     * @return A new item stack for an empty butterfly net
+     */
+    @Override
+    public ItemStack getContainerItem(ItemStack itemStack) {
+        return new ItemStack(ItemList.BUTTERFLY_NET.get());
+    }
+
+    /**
+     * Tell the recipe system that we have an item left over after crafting
+     * We do it this way because it returns the same item type
+     * @return Always true
+     */
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean hasCraftingRemainingItem() {
+        return true;
     }
 
     /**
@@ -80,49 +100,11 @@ public class ButterflyNetItem extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level,
                                                            @NotNull Player player,
                                                            @NotNull InteractionHand hand) {
-            ItemStack stack = player.getItemInHand(hand);
-            CompoundTag tag = stack.getOrCreateTag();
-            int state = tag.getInt("CustomModelData");
-            if (state != 0) {
-                if (level instanceof ServerLevel) {
-                    if (state == 9999) {
-                        PeacemakerButterfly peacemakerButterfly =
-                                EntityList.PEACEMAKER_BUTTERFLY.get().create(player.level);
-                        if (peacemakerButterfly != null) {
-                            peacemakerButterfly.copyPosition(player);
-                            peacemakerButterfly.finalizeSpawn((ServerLevel) level,
-                                    level.getCurrentDifficultyAt(player.getOnPos()),
-                                    MobSpawnType.NATURAL,
-                                    null,
-                                    null);
+        InteractionResultHolder<ItemStack> result = ItemUtil.releaseButterfly(level, player, hand);
+        if (result == null) {
+            result = super.use(level, player, hand);
+        }
 
-                            player.level.addFreshEntity(peacemakerButterfly);
-
-                            tag.putInt("CustomModelData", 0);
-                        }
-                    } else {
-                        Butterfly butterfly = EntityList.BUTTERFLY.get().create(player.level);
-                        if (butterfly != null) {
-                            butterfly.copyPosition(player);
-                            butterfly.finalizeSpawn((ServerLevel) level,
-                                    level.getCurrentDifficultyAt(player.getOnPos()),
-                                    MobSpawnType.NATURAL,
-                                    null,
-                                    null);
-                            butterfly.setVariant(state - 1);
-
-                            player.level.addFreshEntity(butterfly);
-
-                            tag.putInt("CustomModelData", 0);
-                        }
-                    }
-                } else {
-                    player.playSound(SoundEvents.PLAYER_ATTACK_WEAK, 1F, 1F);
-                }
-
-                return InteractionResultHolder.success(stack);
-            }
-
-        return super.use(level, player, hand);
+        return result;
     }
 }
