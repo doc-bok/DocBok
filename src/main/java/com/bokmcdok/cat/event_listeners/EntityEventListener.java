@@ -1,7 +1,8 @@
 package com.bokmcdok.cat.event_listeners;
 
 import com.bokmcdok.cat.lists.ItemList;
-import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
+import com.bokmcdok.cat.objects.items.BottledButterflyItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.EntityType;
@@ -111,8 +112,7 @@ public class EntityEventListener {
                     CompoundTag tag = recipeItem.getOrCreateTag();
                     int state = tag.getInt("CustomModelData");
 
-                    CompoundTag newTag = craftingItem.getOrCreateTag();
-                    newTag.putInt("CustomModelData", state);
+                    BottledButterflyItem.setVariant(craftingItem, state);
 
                     break;
                 }

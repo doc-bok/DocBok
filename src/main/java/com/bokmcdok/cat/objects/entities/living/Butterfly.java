@@ -1,4 +1,4 @@
-package com.bokmcdok.cat.objects.entities;
+package com.bokmcdok.cat.objects.entities.living;
 
 import com.bokmcdok.cat.objects.renderers.ButterflyRenderer;
 import net.minecraft.core.BlockPos;

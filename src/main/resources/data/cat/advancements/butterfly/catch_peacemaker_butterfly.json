@@ -22,7 +22,7 @@
         "items": [
           {
             "item": "cat:butterfly_net",
-            "nbt": "{CustomModelData:9999}"
+            "nbt": "{CustomModelData:10}"
           }
         ]
       }

@@ -2,7 +2,7 @@ package com.bokmcdok.cat.objects.items;
 
 import com.bokmcdok.cat.lists.EntityList;
 import com.bokmcdok.cat.lists.ItemList;
-import com.bokmcdok.cat.objects.entities.Butterfly;
+import com.bokmcdok.cat.objects.entities.living.Butterfly;
 import com.bokmcdok.cat.util.ItemUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
@@ -77,7 +77,7 @@ public class ButterflyNetItem extends Item {
         if (entity.getType() == EntityList.PEACEMAKER_BUTTERFLY.get()) {
             CompoundTag tag = stack.getOrCreateTag();
             if (tag.getInt("CustomModelData") == 0) {
-                tag.putInt("CustomModelData", 9999);
+                tag.putInt("CustomModelData", 10);
                 entity.discard();
 
                 player.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 1F, 1F);

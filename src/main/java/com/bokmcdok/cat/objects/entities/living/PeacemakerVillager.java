@@ -1,4 +1,4 @@
-package com.bokmcdok.cat.objects.entities;
+package com.bokmcdok.cat.objects.entities.living;
 
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
@@ -6,7 +6,10 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.VillagerGoalPackages;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
@@ -21,6 +24,16 @@ public class PeacemakerVillager extends Villager {
 
     //  The entity name, used for registration
     public final static String NAME = "peacemaker_villager";
+
+    /**
+     * Butterflies make their hosts faster, stronger, and tougher
+     * @return Attributes for the entity
+     */
+    public static AttributeSupplier.@NotNull Builder createAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.6D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D);
+    }
 
     /**
      * Create a peacemaker villager

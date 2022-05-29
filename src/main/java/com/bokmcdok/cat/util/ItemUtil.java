@@ -2,8 +2,10 @@ package com.bokmcdok.cat.util;
 
 import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.lists.EntityList;
-import com.bokmcdok.cat.objects.entities.Butterfly;
-import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
+import com.bokmcdok.cat.lists.ItemList;
+import com.bokmcdok.cat.objects.entities.living.Butterfly;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
+import com.bokmcdok.cat.objects.items.BottledButterflyItem;
 import com.bokmcdok.cat.objects.models.ItemModels;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.nbt.CompoundTag;
@@ -54,7 +56,7 @@ public class ItemUtil {
         int state = tag.getInt("CustomModelData");
         if (state != 0) {
             if (level instanceof ServerLevel) {
-                if (state == 9999) {
+                if (state == 10) {
                     PeacemakerButterfly peacemakerButterfly =
                             EntityList.PEACEMAKER_BUTTERFLY.get().create(player.level);
                     if (peacemakerButterfly != null) {
@@ -66,8 +68,6 @@ public class ItemUtil {
                                 null);
 
                         player.level.addFreshEntity(peacemakerButterfly);
-
-                        tag.putInt("CustomModelData", 0);
                     }
                 } else {
                     Butterfly butterfly = EntityList.BUTTERFLY.get().create(player.level);
@@ -81,9 +81,13 @@ public class ItemUtil {
                         butterfly.setVariant(state - 1);
 
                         player.level.addFreshEntity(butterfly);
-
-                        tag.putInt("CustomModelData", 0);
                     }
+                }
+
+                if (stack.getItem() == ItemList.BOTTLED_BUTTERFLY.get()) {
+                    BottledButterflyItem.setVariant(stack, 0);
+                } else {
+                    tag.putInt("CustomModelData", 0);
                 }
             } else {
                 player.playSound(SoundEvents.PLAYER_ATTACK_WEAK, 1F, 1F);

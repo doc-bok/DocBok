@@ -1,7 +1,7 @@
 package com.bokmcdok.cat.objects.models;
 
 import com.bokmcdok.cat.CatMod;
-import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

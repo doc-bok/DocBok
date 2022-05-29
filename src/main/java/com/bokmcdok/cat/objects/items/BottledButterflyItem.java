@@ -1,20 +1,22 @@
 package com.bokmcdok.cat.objects.items;
 
 import com.bokmcdok.cat.util.ItemUtil;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Bottled Butterfly
  * - A butterfly trapped in a bottle.
  */
-public class BottledButterflyIItem extends Item {
+public class BottledButterflyItem extends BlockItem {
 
     //  The name to register with
     public static String NAME = "bottled_butterfly";
@@ -23,8 +25,8 @@ public class BottledButterflyIItem extends Item {
      * Create a bottled butterfly
      * @param properties The item properties
      */
-    public BottledButterflyIItem(Properties properties) {
-        super(properties);
+    public BottledButterflyItem(Block block, Properties properties) {
+        super(block, properties);
     }
 
     /**
@@ -46,5 +48,18 @@ public class BottledButterflyIItem extends Item {
         player.setItemInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
 
         return result;
+    }
+
+    /**
+     * Set the variant on the bottled butterfly item
+     * @param stack The item stack to modify
+     * @param variant The variant of the butterfly
+     */
+    public static void setVariant(ItemStack stack, int variant) {
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putInt("CustomModelData", variant);
+
+        CompoundTag blockStateTag = stack.getOrCreateTagElement("BlockStateTag");
+        blockStateTag.putInt("variant", variant);
     }
 }
