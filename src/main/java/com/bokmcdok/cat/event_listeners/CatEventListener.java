@@ -1,7 +1,7 @@
 package com.bokmcdok.cat.event_listeners;
 
 import com.bokmcdok.cat.lists.TagList;
-import com.bokmcdok.cat.objects.entities.NyanCat;
+import com.bokmcdok.cat.objects.entities.living.NyanCat;
 import com.bokmcdok.cat.lists.EntityList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;

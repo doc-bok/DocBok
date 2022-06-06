@@ -1,13 +1,14 @@
 package com.bokmcdok.cat.lists;
 
 import com.bokmcdok.cat.CatMod;
-import com.bokmcdok.cat.objects.entities.Butterfly;
-import com.bokmcdok.cat.objects.entities.NyanCat;
-import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
-import com.bokmcdok.cat.objects.entities.PeacemakerEvoker;
-import com.bokmcdok.cat.objects.entities.PeacemakerIllusioner;
 import com.bokmcdok.cat.objects.entities.PeacemakerPillager;
-import com.bokmcdok.cat.objects.entities.PeacemakerVillager;
+import com.bokmcdok.cat.objects.entities.living.Butterfly;
+import com.bokmcdok.cat.objects.entities.living.NyanCat;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerEvoker;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerIllusioner;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerVillager;
+import com.bokmcdok.cat.objects.items.BottledButterflyItem;
 import com.bokmcdok.cat.objects.items.ButterflyNetItem;
 import com.bokmcdok.cat.objects.items.PeacemakerHoneyBottleItem;
 import net.minecraft.world.food.Foods;
@@ -47,6 +48,12 @@ public class ItemList {
             () -> new ButterflyNetItem(new Item.Properties()
                     .stacksTo(1)
                     .tab(CreativeModeTab.TAB_TOOLS)));
+
+    //  Bottled butterfly
+    public static final RegistryObject<Item> BOTTLED_BUTTERFLY = ITEMS.register(BottledButterflyItem.NAME,
+            () -> new BottledButterflyItem(BlockList.BOTTLED_BUTTERFLY.get(), new Item.Properties()
+                    .stacksTo(1)
+                    .tab(CreativeModeTab.TAB_MISC)));
 
     //  Spawn eggs
     public static final RegistryObject<Item> PEACEMAKER_BUTTERFLY_EGG = ITEMS.register(PeacemakerButterfly.NAME,

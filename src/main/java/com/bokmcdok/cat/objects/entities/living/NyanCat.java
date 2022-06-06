@@ -1,4 +1,4 @@
-package com.bokmcdok.cat.objects.entities;
+package com.bokmcdok.cat.objects.entities.living;
 
 import com.bokmcdok.cat.CatMod;
 import com.bokmcdok.cat.lists.ParticleList;

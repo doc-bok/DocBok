@@ -1,4 +1,4 @@
-package com.bokmcdok.cat.objects.entities;
+package com.bokmcdok.cat.objects.entities.living;
 
 import com.bokmcdok.cat.objects.renderers.ButterflyRenderer;
 import net.minecraft.core.BlockPos;
@@ -37,6 +37,11 @@ public class Butterfly extends AmbientCreature {
     //  This is the name we will use to reference the Butterfly
     public static final String NAME = "butterfly";
 
+    //  Flag to indicate if a player placed this butterfly, to prevent
+    //  despawning
+    private static final EntityDataAccessor<Boolean> DATA_RESPAWNED =
+            SynchedEntityData.defineId(Butterfly.class, EntityDataSerializers.BOOLEAN);
+
     //  Holds the variant of the butterfly, which defines the texture used to
     //  render it.
     private static final EntityDataAccessor<Integer> DATA_VARIANT =
@@ -45,13 +50,15 @@ public class Butterfly extends AmbientCreature {
     //  The number of ticks per flap. Used for event emissions.
     private static final int TICKS_PER_FLAP = Mth.ceil(2.4166098f);
 
+    //  The name of the respawned attribute in the save data.
+    private static final String RESPAWNED = "butterflyRespawned";
+
     //  The name of the variant attribute in the save data.
     private static final String VARIANT = "butterflyVariant";
 
     //  The current position the butterfly is flying toward.
     @Nullable
     private BlockPos targetPosition;
-
 
     /**
      * Defines the spawn rules for butterflies: they can spawn anywhere the
@@ -96,6 +103,7 @@ public class Butterfly extends AmbientCreature {
     public void addAdditionalSaveData(@NotNull CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt(VARIANT, this.entityData.get(DATA_VARIANT));
+        tag.putBoolean(RESPAWNED, this.entityData.get(DATA_RESPAWNED));
     }
 
     /**
@@ -173,6 +181,24 @@ public class Butterfly extends AmbientCreature {
     public void readAdditionalSaveData(@NotNull CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.entityData.set(DATA_VARIANT, tag.getInt(VARIANT));
+        this.entityData.set(DATA_RESPAWNED, tag.getBoolean(RESPAWNED));
+    }
+
+    /**
+     * Butterflies placed by the player will not despawn
+     * @return true if the player placed this butterfly
+     */
+    @Override
+    public boolean requiresCustomPersistence() {
+        return super.requiresCustomPersistence() ||
+                this.entityData.get(DATA_RESPAWNED);
+    }
+
+    /**
+     * Set that this butterfly has been respawned.
+     */
+    public void setRespawned() {
+        entityData.set(DATA_RESPAWNED, true);
     }
 
     /**
@@ -211,6 +237,7 @@ public class Butterfly extends AmbientCreature {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
+
         if (this.targetPosition != null &&
                 (!this.level.isEmptyBlock(this.targetPosition) ||
                         this.targetPosition.getY() <= this.level.getMinBuildHeight())) {
@@ -245,6 +272,7 @@ public class Butterfly extends AmbientCreature {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_VARIANT, 0);
+        this.entityData.define(DATA_RESPAWNED, false);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.bokmcdok.cat.objects.renderers;
 
-import com.bokmcdok.cat.objects.entities.Butterfly;
+import com.bokmcdok.cat.objects.entities.living.Butterfly;
 import com.bokmcdok.cat.objects.models.ButterflyModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -23,6 +23,7 @@ public class ButterflyRenderer extends MobRenderer<Butterfly, ButterflyModel> {
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_seethru.png"),
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_sword.png"),
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_white.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_peacemaker.png"),
     };
 
     /**

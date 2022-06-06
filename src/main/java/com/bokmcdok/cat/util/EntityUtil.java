@@ -1,14 +1,14 @@
 package com.bokmcdok.cat.util;
 
 import com.bokmcdok.cat.CatMod;
-import com.bokmcdok.cat.objects.entities.Butterfly;
-import com.bokmcdok.cat.objects.entities.NyanCat;
+import com.bokmcdok.cat.objects.entities.living.Butterfly;
+import com.bokmcdok.cat.objects.entities.living.NyanCat;
 import com.bokmcdok.cat.lists.EntityList;
-import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
-import com.bokmcdok.cat.objects.entities.PeacemakerEvoker;
-import com.bokmcdok.cat.objects.entities.PeacemakerIllusioner;
 import com.bokmcdok.cat.objects.entities.PeacemakerPillager;
-import com.bokmcdok.cat.objects.entities.PeacemakerVillager;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerEvoker;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerIllusioner;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerVillager;
 import com.bokmcdok.cat.objects.models.ButterflyModel;
 import com.bokmcdok.cat.objects.models.PeacemakerButterflyModel;
 import com.bokmcdok.cat.objects.renderers.ButterflyRenderer;
@@ -77,10 +77,10 @@ public class EntityUtil {
         event.put(EntityList.NYAN_CAT.get(), NyanCat.createAttributes().build());
         event.put(EntityList.BUTTERFLY.get(), Butterfly.createAttributes().build());
         event.put(EntityList.PEACEMAKER_BUTTERFLY.get(), PeacemakerButterfly.createAttributes().build());
-        event.put(EntityList.PEACEMAKER_EVOKER.get(), Evoker.createAttributes().build());
-        event.put(EntityList.PEACEMAKER_ILLUSIONER.get(), Illusioner.createAttributes().build());
-        event.put(EntityList.PEACEMAKER_PILLAGER.get(), Pillager.createAttributes().build());
-        event.put(EntityList.PEACEMAKER_VILLAGER.get(), Villager.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_EVOKER.get(), PeacemakerEvoker.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_ILLUSIONER.get(), PeacemakerIllusioner.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_PILLAGER.get(), PeacemakerPillager.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_VILLAGER.get(), PeacemakerVillager.createAttributes().build());
     }
 
     /**
