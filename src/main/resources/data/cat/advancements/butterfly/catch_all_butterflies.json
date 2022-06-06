@@ -2,7 +2,8 @@
   "parent": "cat:butterfly/catch_butterfly",
   "display": {
     "icon": {
-      "item": "cat:butterfly_net"
+      "item": "cat:butterfly_net",
+      "nbt": "{CustomModelData:7}"
     },
     "title": {
       "translate": "advancements.butterfly.catch_all_butterflies.title"
@@ -10,7 +11,7 @@
     "description": {
       "translate": "advancements.butterfly.catch_all_butterflies.description"
     },
-    "frame": "challenge",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false

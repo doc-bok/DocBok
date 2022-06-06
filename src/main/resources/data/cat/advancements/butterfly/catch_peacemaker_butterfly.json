@@ -1,8 +1,9 @@
 {
-  "parent": "cat:butterfly/catch_butterfly",
+  "parent": "cat:butterfly/root",
   "display": {
     "icon": {
-      "item": "cat:butterfly_net"
+      "item": "cat:butterfly_net",
+      "nbt": "{CustomModelData:10}"
     },
     "title": {
       "translate": "advancements.butterfly.catch_peacemaker_butterfly.title"
@@ -13,7 +14,7 @@
     "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,
-    "hidden": false
+    "hidden": true
   },
   "criteria": {
     "caught": {
