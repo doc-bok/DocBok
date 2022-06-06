@@ -100,7 +100,8 @@ public class ButterflyNetItem extends Item {
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level,
                                                            @NotNull Player player,
                                                            @NotNull InteractionHand hand) {
-        InteractionResultHolder<ItemStack> result = ItemUtil.releaseButterfly(level, player, hand, player.blockPosition());
+        InteractionResultHolder<ItemStack> result =
+                ItemUtil.releaseButterfly(level, player, hand, player.blockPosition(), false);
         if (result == null) {
             result = super.use(level, player, hand);
         }

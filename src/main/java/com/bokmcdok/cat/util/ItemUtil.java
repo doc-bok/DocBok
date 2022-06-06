@@ -18,6 +18,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
@@ -52,22 +53,30 @@ public class ItemUtil {
     public static InteractionResultHolder<ItemStack> releaseButterfly(@NotNull Level level,
                                                                       @NotNull Player player,
                                                                       @NotNull InteractionHand hand,
-                                                                      BlockPos position) {
+                                                                      BlockPos position,
+                                                                      Boolean isBottled) {
+
         ItemStack stack = player.getItemInHand(hand);
         CompoundTag tag = stack.getOrCreateTag();
         int state = tag.getInt("CustomModelData");
         if (state != 0) {
             if (level instanceof ServerLevel) {
-                if (state == 10 &&
-                    stack.getItem() != ItemList.BOTTLED_BUTTERFLY.get()) {
+
+                //  Move the target position slightly in front of the player
+                if (!isBottled) {
+                    Vec3 lookAngle = player.getLookAngle();
+                    position = position.offset(lookAngle.x, lookAngle.y + 1.5D, lookAngle.z);
+                }
+
+                if (state == 10 && !isBottled) {
 
                     PeacemakerButterfly peacemakerButterfly =
                             EntityList.PEACEMAKER_BUTTERFLY.get().create(player.level);
                     if (peacemakerButterfly != null) {
-                        peacemakerButterfly.moveTo(position.getX(), 0.0F, 0.0F);
+                        peacemakerButterfly.moveTo(position, 0.0F, 0.0F);
                         peacemakerButterfly.finalizeSpawn((ServerLevel) level,
                                 level.getCurrentDifficultyAt(player.getOnPos()),
-                                MobSpawnType.BUCKET,
+                                MobSpawnType.NATURAL,
                                 null,
                                 null);
 
@@ -82,13 +91,13 @@ public class ItemUtil {
                                          0.0F, 0.0F);
                         butterfly.finalizeSpawn((ServerLevel) level,
                                 level.getCurrentDifficultyAt(player.getOnPos()),
-                                MobSpawnType.BUCKET,
+                                MobSpawnType.NATURAL,
                                 null,
                                 null);
                         butterfly.setVariant(state - 1);
                         butterfly.setRespawned();
 
-                        if (stack.getItem() == ItemList.BOTTLED_BUTTERFLY.get()) {
+                        if (isBottled) {
                             butterfly.setInvulnerable(true);
                         }
                         

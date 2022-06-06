@@ -61,7 +61,8 @@ public class BottledButterflyItem extends BlockItem {
     public InteractionResultHolder<ItemStack> use(@NotNull Level level,
                                                   @NotNull Player player,
                                                   @NotNull InteractionHand hand) {
-        InteractionResultHolder<ItemStack> result = ItemUtil.releaseButterfly(level, player, hand, player.blockPosition());
+        InteractionResultHolder<ItemStack> result =
+                ItemUtil.releaseButterfly(level, player, hand, player.blockPosition(), false);
         if (result == null) {
             result = super.use(level, player, hand);
         }
@@ -82,7 +83,7 @@ public class BottledButterflyItem extends BlockItem {
             InteractionHand hand= context.getHand();
 
             if (player != null) {
-                ItemUtil.releaseButterfly(level, player, hand, position);
+                ItemUtil.releaseButterfly(level, player, hand, position, true);
             }
         }
 
