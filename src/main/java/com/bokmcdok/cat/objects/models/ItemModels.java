@@ -39,6 +39,7 @@ public class ItemModels extends ItemModelProvider {
         withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_ILLUSIONER_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_PILLAGER_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_VILLAGER_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_VINDICATOR_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.BUTTERFLY_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.NYAN_CAT_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
     }

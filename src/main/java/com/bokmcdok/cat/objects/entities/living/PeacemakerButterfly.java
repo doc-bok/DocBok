@@ -35,6 +35,7 @@ import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -217,8 +218,8 @@ public class PeacemakerButterfly extends Monster {
                     convertTo(level, illager, EntityList.PEACEMAKER_ILLUSIONER.get());
                 } else if (illager instanceof Pillager) {
                     convertTo(level, illager, EntityList.PEACEMAKER_PILLAGER.get());
-                } else {
-                    convertTo(level, illager, EntityType.ZOMBIE);
+                } else if (illager instanceof Vindicator){
+                    convertTo(level, illager, EntityList.PEACEMAKER_VINDICATOR.get());
                 }
             }
         }

@@ -8,6 +8,7 @@ import com.bokmcdok.cat.objects.entities.living.PeacemakerEvoker;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerIllusioner;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerPillager;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerVillager;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerVindicator;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.RegistryObject;
@@ -71,4 +72,12 @@ public class EntityList {
                             .sized(0.6f, 1.95f)
                             .clientTrackingRange(10)
                             .build(PeacemakerVillager.NAME));
+
+    //  Peacemaker Vindicator
+    public static final RegistryObject<EntityType<PeacemakerVindicator>> PEACEMAKER_VINDICATOR =
+            ENTITIES.register(PeacemakerVindicator.NAME, () ->
+                    EntityType.Builder.of(PeacemakerVindicator::new, MobCategory.CREATURE)
+                            .sized(0.6f, 1.95f)
+                            .clientTrackingRange(10)
+                            .build(PeacemakerVindicator.NAME));
 }

@@ -9,6 +9,7 @@ import com.bokmcdok.cat.objects.entities.living.PeacemakerEvoker;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerIllusioner;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerPillager;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerVillager;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerVindicator;
 import com.bokmcdok.cat.objects.models.ButterflyModel;
 import com.bokmcdok.cat.objects.models.PeacemakerButterflyModel;
 import com.bokmcdok.cat.objects.renderers.ButterflyRenderer;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.entity.EvokerRenderer;
 import net.minecraft.client.renderer.entity.IllusionerRenderer;
 import net.minecraft.client.renderer.entity.PillagerRenderer;
 import net.minecraft.client.renderer.entity.VillagerRenderer;
+import net.minecraft.client.renderer.entity.VindicatorRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -25,6 +27,7 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -50,7 +53,8 @@ public class EntityUtil {
                 entity instanceof PeacemakerEvoker ||
                 entity instanceof PeacemakerIllusioner ||
                 entity instanceof PeacemakerPillager ||
-                entity instanceof PeacemakerVillager);
+                entity instanceof PeacemakerVillager ||
+                entity instanceof PeacemakerVindicator);
     }
 
     /**
@@ -67,6 +71,7 @@ public class EntityUtil {
         event.registerEntityRenderer(EntityList.PEACEMAKER_ILLUSIONER.get(), IllusionerRenderer::new);
         event.registerEntityRenderer(EntityList.PEACEMAKER_PILLAGER.get(), PillagerRenderer::new);
         event.registerEntityRenderer(EntityList.PEACEMAKER_VILLAGER.get(), VillagerRenderer::new);
+        event.registerEntityRenderer(EntityList.PEACEMAKER_VINDICATOR.get(), VindicatorRenderer::new);
     }
 
     /**
@@ -81,6 +86,7 @@ public class EntityUtil {
         event.put(EntityList.PEACEMAKER_ILLUSIONER.get(), PeacemakerIllusioner.createAttributes().build());
         event.put(EntityList.PEACEMAKER_PILLAGER.get(), PeacemakerPillager.createAttributes().build());
         event.put(EntityList.PEACEMAKER_VILLAGER.get(), PeacemakerVillager.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_VINDICATOR.get(), PeacemakerVindicator.createAttributes().build());
     }
 
     /**
@@ -123,6 +129,11 @@ public class EntityUtil {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Villager::checkMobSpawnRules);
+
+        SpawnPlacements.register(EntityList.PEACEMAKER_VINDICATOR.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Vindicator::checkMobSpawnRules);
     }
 
     /**
