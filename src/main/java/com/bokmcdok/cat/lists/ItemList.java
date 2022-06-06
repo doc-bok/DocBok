@@ -1,12 +1,12 @@
 package com.bokmcdok.cat.lists;
 
 import com.bokmcdok.cat.CatMod;
-import com.bokmcdok.cat.objects.entities.PeacemakerPillager;
 import com.bokmcdok.cat.objects.entities.living.Butterfly;
 import com.bokmcdok.cat.objects.entities.living.NyanCat;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerEvoker;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerIllusioner;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerPillager;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerVillager;
 import com.bokmcdok.cat.objects.items.BottledButterflyItem;
 import com.bokmcdok.cat.objects.items.ButterflyNetItem;
