@@ -1,12 +1,15 @@
-package com.bokmcdok.cat.objects.entities;
+package com.bokmcdok.cat.objects.entities.living;
 
 import com.bokmcdok.cat.util.EntityUtil;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.Evoker;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
@@ -17,6 +20,17 @@ public class PeacemakerEvoker extends Evoker {
 
     //  The name used for registration
     public static final String NAME = "peacemaker_evoker";
+
+    /**
+     * Butterflies make their hosts faster, stronger, and tougher
+     * @return Attributes for the entity
+     */
+    public static AttributeSupplier.@NotNull Builder createAttributes() {
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MOVEMENT_SPEED, 0.6D)
+                .add(Attributes.FOLLOW_RANGE, 12.0D)
+                .add(Attributes.MAX_HEALTH, 26.0D);
+    }
 
     /**
      * Create a peacemaker evoker

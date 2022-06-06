@@ -1,12 +1,13 @@
 package com.bokmcdok.cat.lists;
 
 import com.bokmcdok.cat.CatMod;
-import com.bokmcdok.cat.objects.entities.Butterfly;
-import com.bokmcdok.cat.objects.entities.NyanCat;
-import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
-import com.bokmcdok.cat.objects.entities.PeacemakerEvoker;
-import com.bokmcdok.cat.objects.entities.PeacemakerIllusioner;
-import com.bokmcdok.cat.objects.entities.PeacemakerVillager;
+import com.bokmcdok.cat.objects.entities.living.Butterfly;
+import com.bokmcdok.cat.objects.entities.living.NyanCat;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerEvoker;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerIllusioner;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerPillager;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerVillager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.RegistryObject;
@@ -54,6 +55,14 @@ public class EntityList {
                             .sized(0.6f, 1.95f)
                             .clientTrackingRange(8)
                             .build(PeacemakerIllusioner.NAME));
+
+    //  Peacemaker Pillager
+    public static final RegistryObject<EntityType<PeacemakerPillager>> PEACEMAKER_PILLAGER =
+            ENTITIES.register(PeacemakerPillager.NAME, () ->
+                    EntityType.Builder.of(PeacemakerPillager::new, MobCategory.MONSTER)
+                            .sized(0.6f, 1.95f)
+                            .clientTrackingRange(8)
+                            .build(PeacemakerPillager.NAME));
 
     //  Peacemaker Villager
     public static final RegistryObject<EntityType<PeacemakerVillager>> PEACEMAKER_VILLAGER =

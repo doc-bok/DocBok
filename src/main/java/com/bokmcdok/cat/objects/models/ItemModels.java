@@ -29,6 +29,7 @@ public class ItemModels extends ItemModelProvider {
     protected void registerModels() {
 
         //  Items
+        withExistingParent(Objects.requireNonNull(ItemList.BOTTLED_BUTTERFLY.get().getRegistryName()).getPath(), mcLoc("item/bottled_butterfly"));
         withExistingParent(Objects.requireNonNull(ItemList.BUTTERFLY_NET.get().getRegistryName()).getPath(), mcLoc("item/butterfly_net"));
         withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_HONEY_BOTTLE.get().getRegistryName()).getPath(), mcLoc("item/peacemaker_honey_bottle"));
 
@@ -36,6 +37,7 @@ public class ItemModels extends ItemModelProvider {
         withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_BUTTERFLY_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_EVOKER_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_ILLUSIONER_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_PILLAGER_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.PEACEMAKER_VILLAGER_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.BUTTERFLY_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Objects.requireNonNull(ItemList.NYAN_CAT_EGG.get().getRegistryName()).getPath(), mcLoc("item/template_spawn_egg"));

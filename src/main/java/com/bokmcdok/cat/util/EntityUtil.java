@@ -1,13 +1,14 @@
 package com.bokmcdok.cat.util;
 
 import com.bokmcdok.cat.CatMod;
-import com.bokmcdok.cat.objects.entities.Butterfly;
-import com.bokmcdok.cat.objects.entities.NyanCat;
+import com.bokmcdok.cat.objects.entities.living.Butterfly;
+import com.bokmcdok.cat.objects.entities.living.NyanCat;
 import com.bokmcdok.cat.lists.EntityList;
-import com.bokmcdok.cat.objects.entities.PeacemakerButterfly;
-import com.bokmcdok.cat.objects.entities.PeacemakerEvoker;
-import com.bokmcdok.cat.objects.entities.PeacemakerIllusioner;
-import com.bokmcdok.cat.objects.entities.PeacemakerVillager;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerEvoker;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerIllusioner;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerPillager;
+import com.bokmcdok.cat.objects.entities.living.PeacemakerVillager;
 import com.bokmcdok.cat.objects.models.ButterflyModel;
 import com.bokmcdok.cat.objects.models.PeacemakerButterflyModel;
 import com.bokmcdok.cat.objects.renderers.ButterflyRenderer;
@@ -15,6 +16,7 @@ import com.bokmcdok.cat.objects.renderers.PeacemakerButterflyRenderer;
 import net.minecraft.client.renderer.entity.CatRenderer;
 import net.minecraft.client.renderer.entity.EvokerRenderer;
 import net.minecraft.client.renderer.entity.IllusionerRenderer;
+import net.minecraft.client.renderer.entity.PillagerRenderer;
 import net.minecraft.client.renderer.entity.VillagerRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +24,7 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Evoker;
 import net.minecraft.world.entity.monster.Illusioner;
+import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -46,6 +49,7 @@ public class EntityUtil {
         return !(entity instanceof PeacemakerButterfly ||
                 entity instanceof PeacemakerEvoker ||
                 entity instanceof PeacemakerIllusioner ||
+                entity instanceof PeacemakerPillager ||
                 entity instanceof PeacemakerVillager);
     }
 
@@ -61,6 +65,7 @@ public class EntityUtil {
         event.registerEntityRenderer(EntityList.NYAN_CAT.get(), CatRenderer::new);
         event.registerEntityRenderer(EntityList.PEACEMAKER_EVOKER.get(), EvokerRenderer::new);
         event.registerEntityRenderer(EntityList.PEACEMAKER_ILLUSIONER.get(), IllusionerRenderer::new);
+        event.registerEntityRenderer(EntityList.PEACEMAKER_PILLAGER.get(), PillagerRenderer::new);
         event.registerEntityRenderer(EntityList.PEACEMAKER_VILLAGER.get(), VillagerRenderer::new);
     }
 
@@ -72,9 +77,10 @@ public class EntityUtil {
         event.put(EntityList.NYAN_CAT.get(), NyanCat.createAttributes().build());
         event.put(EntityList.BUTTERFLY.get(), Butterfly.createAttributes().build());
         event.put(EntityList.PEACEMAKER_BUTTERFLY.get(), PeacemakerButterfly.createAttributes().build());
-        event.put(EntityList.PEACEMAKER_EVOKER.get(), Evoker.createAttributes().build());
-        event.put(EntityList.PEACEMAKER_ILLUSIONER.get(), Illusioner.createAttributes().build());
-        event.put(EntityList.PEACEMAKER_VILLAGER.get(), Villager.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_EVOKER.get(), PeacemakerEvoker.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_ILLUSIONER.get(), PeacemakerIllusioner.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_PILLAGER.get(), PeacemakerPillager.createAttributes().build());
+        event.put(EntityList.PEACEMAKER_VILLAGER.get(), PeacemakerVillager.createAttributes().build());
     }
 
     /**
@@ -107,6 +113,11 @@ public class EntityUtil {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Illusioner::checkMobSpawnRules);
+
+        SpawnPlacements.register(EntityList.PEACEMAKER_PILLAGER.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Pillager::checkMobSpawnRules);
 
         SpawnPlacements.register(EntityList.PEACEMAKER_VILLAGER.get(),
                 SpawnPlacements.Type.ON_GROUND,

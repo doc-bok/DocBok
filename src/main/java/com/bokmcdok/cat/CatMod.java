@@ -1,6 +1,8 @@
 package com.bokmcdok.cat;
 
 import com.bokmcdok.cat.event_listeners.EntityEventListener;
+import com.bokmcdok.cat.lists.BlockEntityList;
+import com.bokmcdok.cat.lists.BlockList;
 import com.bokmcdok.cat.lists.ItemList;
 import com.bokmcdok.cat.lists.ParticleList;
 import com.bokmcdok.cat.event_listeners.CatEventListener;
@@ -38,6 +40,8 @@ public class CatMod
         new TagList();
 
         // Deferred registries.
+        BlockList.BLOCKS.register(modEventBus);
+        BlockEntityList.BLOCK_ENTITIES.register(modEventBus);
         EntityList.ENTITIES.register(modEventBus);
         ItemList.ITEMS.register(modEventBus);
         ParticleList.PARTICLES.register(modEventBus);
