@@ -7,6 +7,7 @@ import com.bokmcdok.cat.objects.entities.living.Butterfly;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
 import com.bokmcdok.cat.objects.items.BottledButterflyItem;
 import com.bokmcdok.cat.objects.models.ItemModels;
+import net.minecraft.core.BlockPos;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -50,20 +51,23 @@ public class ItemUtil {
      */
     public static InteractionResultHolder<ItemStack> releaseButterfly(@NotNull Level level,
                                                                       @NotNull Player player,
-                                                                      @NotNull InteractionHand hand) {
+                                                                      @NotNull InteractionHand hand,
+                                                                      BlockPos position) {
         ItemStack stack = player.getItemInHand(hand);
         CompoundTag tag = stack.getOrCreateTag();
         int state = tag.getInt("CustomModelData");
         if (state != 0) {
             if (level instanceof ServerLevel) {
-                if (state == 10) {
+                if (state == 10 &&
+                    stack.getItem() != ItemList.BOTTLED_BUTTERFLY.get()) {
+
                     PeacemakerButterfly peacemakerButterfly =
                             EntityList.PEACEMAKER_BUTTERFLY.get().create(player.level);
                     if (peacemakerButterfly != null) {
-                        peacemakerButterfly.copyPosition(player);
+                        peacemakerButterfly.moveTo(position.getX(), 0.0F, 0.0F);
                         peacemakerButterfly.finalizeSpawn((ServerLevel) level,
                                 level.getCurrentDifficultyAt(player.getOnPos()),
-                                MobSpawnType.NATURAL,
+                                MobSpawnType.BUCKET,
                                 null,
                                 null);
 
@@ -72,22 +76,32 @@ public class ItemUtil {
                 } else {
                     Butterfly butterfly = EntityList.BUTTERFLY.get().create(player.level);
                     if (butterfly != null) {
-                        butterfly.copyPosition(player);
+                        butterfly.moveTo(position.getX() + 0.45D,
+                                         position.getY() + 0.2D,
+                                         position.getZ() + 0.5D,
+                                         0.0F, 0.0F);
                         butterfly.finalizeSpawn((ServerLevel) level,
                                 level.getCurrentDifficultyAt(player.getOnPos()),
-                                MobSpawnType.NATURAL,
+                                MobSpawnType.BUCKET,
                                 null,
                                 null);
                         butterfly.setVariant(state - 1);
+                        butterfly.setRespawned();
 
+                        if (stack.getItem() == ItemList.BOTTLED_BUTTERFLY.get()) {
+                            butterfly.setInvulnerable(true);
+                        }
+                        
                         player.level.addFreshEntity(butterfly);
                     }
                 }
 
-                if (stack.getItem() == ItemList.BOTTLED_BUTTERFLY.get()) {
-                    BottledButterflyItem.setVariant(stack, 0);
-                } else {
-                    tag.putInt("CustomModelData", 0);
+                if (!player.isCreative()) {
+                    if (stack.getItem() == ItemList.BOTTLED_BUTTERFLY.get()) {
+                        BottledButterflyItem.setVariant(stack, 0);
+                    } else {
+                        tag.putInt("CustomModelData", 0);
+                    }
                 }
             } else {
                 player.playSound(SoundEvents.PLAYER_ATTACK_WEAK, 1F, 1F);

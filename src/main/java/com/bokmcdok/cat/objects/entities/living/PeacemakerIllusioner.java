@@ -31,7 +31,7 @@ public class PeacemakerIllusioner extends Illusioner {
                 .add(Attributes.FOLLOW_RANGE, 18.0D)
                 .add(Attributes.MAX_HEALTH, 35.0D);
     }
-    
+
     /**
      * Create a peacemaker illusioner
      * @param type The entity type

@@ -1,15 +1,19 @@
 package com.bokmcdok.cat.objects.blocks;
 
 import com.bokmcdok.cat.lists.ItemList;
+import com.bokmcdok.cat.objects.entities.living.Butterfly;
 import com.bokmcdok.cat.objects.items.BottledButterflyItem;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -26,7 +30,7 @@ public class BottledButterflyBlock extends Block {
     public static final IntegerProperty VARIANT = IntegerProperty.create("variant", 0, 10);
 
     //  The AABB(s) for the bottle
-    private static final VoxelShape AABB = Shapes.or(
+    private static final VoxelShape SHAPE = Shapes.or(
             Block.box(5.0, 0.0, 5.0, 10.0, 1.0, 10.0),
             Block.box(4.0, 1.0, 4.D, 11.0, 2.0, 11.0),
             Block.box(3.0, 2.0, 3.0, 12.0, 6.0, 12.0),
@@ -53,13 +57,14 @@ public class BottledButterflyBlock extends Block {
      * @param context The requested collision context
      * @return An AABB(s) for the bottle
      */
+    @NotNull
     @Override
     @SuppressWarnings("deprecation")
-    public @NotNull VoxelShape getShape(@NotNull BlockState state,
+    public VoxelShape getShape(@NotNull BlockState state,
                                         @NotNull BlockGetter getter,
                                         @NotNull BlockPos position,
                                         @NotNull CollisionContext context) {
-        return AABB;
+        return SHAPE;
     }
 
     /**
@@ -68,11 +73,11 @@ public class BottledButterflyBlock extends Block {
      * @param builder The loot builder
      * @return A bottle with the correct bottle
      */
+    @NotNull
     @Override
     @SuppressWarnings("deprecation")
-    public @NotNull List<ItemStack> getDrops(@NotNull BlockState state,
-                                             LootContext.@NotNull Builder builder) {
-
+    public List<ItemStack> getDrops(@NotNull BlockState state,
+                                    @NotNull LootContext.Builder builder) {
         ItemStack stack = new ItemStack(ItemList.BOTTLED_BUTTERFLY.get());
         BottledButterflyItem.setVariant(stack, state.getValue(VARIANT));
 
@@ -89,5 +94,24 @@ public class BottledButterflyBlock extends Block {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(VARIANT);
         super.createBlockStateDefinition(builder);
+    }
+
+    /**
+     * Destroy the butterfly in the bottle when destroyed
+     * @param level The current level
+     * @param position The block's position
+     * @param state The block state
+     */
+    @Override
+    public void destroy(@NotNull LevelAccessor level,
+                        @NotNull BlockPos position,
+                        @NotNull BlockState state) {
+        super.destroy(level, position, state);
+
+        AABB aabb = new AABB(position);
+        List<Butterfly> butterflies = level.getEntitiesOfClass(Butterfly.class, aabb);
+        for(Butterfly i : butterflies) {
+            i.remove(Entity.RemovalReason.DISCARDED);
+        }
     }
 }

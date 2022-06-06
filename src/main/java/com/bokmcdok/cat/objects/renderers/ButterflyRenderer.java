@@ -23,6 +23,7 @@ public class ButterflyRenderer extends MobRenderer<Butterfly, ButterflyModel> {
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_seethru.png"),
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_sword.png"),
             new ResourceLocation("cat:textures/entity/butterfly/butterfly_white.png"),
+            new ResourceLocation("cat:textures/entity/butterfly/butterfly_peacemaker.png"),
     };
 
     /**

@@ -1,15 +1,22 @@
 package com.bokmcdok.cat.objects.items;
 
 import com.bokmcdok.cat.util.ItemUtil;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -20,6 +27,19 @@ public class BottledButterflyItem extends BlockItem {
 
     //  The name to register with
     public static String NAME = "bottled_butterfly";
+
+    /**
+     * Set the variant on the bottled butterfly item
+     * @param stack The item stack to modify
+     * @param variant The variant of the butterfly
+     */
+    public static void setVariant(ItemStack stack, int variant) {
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putInt("CustomModelData", variant);
+
+        CompoundTag blockStateTag = stack.getOrCreateTagElement("BlockStateTag");
+        blockStateTag.putInt("variant", variant);
+    }
 
     /**
      * Create a bottled butterfly
@@ -37,10 +57,11 @@ public class BottledButterflyItem extends BlockItem {
      * @return The result of the interaction
      */
     @Override
-    public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level level,
-                                                           @NotNull Player player,
-                                                           @NotNull InteractionHand hand) {
-        InteractionResultHolder<ItemStack> result = ItemUtil.releaseButterfly(level, player, hand);
+    @NotNull
+    public InteractionResultHolder<ItemStack> use(@NotNull Level level,
+                                                  @NotNull Player player,
+                                                  @NotNull InteractionHand hand) {
+        InteractionResultHolder<ItemStack> result = ItemUtil.releaseButterfly(level, player, hand, player.blockPosition());
         if (result == null) {
             result = super.use(level, player, hand);
         }
@@ -50,16 +71,21 @@ public class BottledButterflyItem extends BlockItem {
         return result;
     }
 
-    /**
-     * Set the variant on the bottled butterfly item
-     * @param stack The item stack to modify
-     * @param variant The variant of the butterfly
-     */
-    public static void setVariant(ItemStack stack, int variant) {
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putInt("CustomModelData", variant);
+    @Override
+    @NotNull
+    public InteractionResult place(@NotNull BlockPlaceContext context) {
+        InteractionResult result = super.place(context);
+        if (result == InteractionResult.CONSUME) {
+            BlockPos position = context.getClickedPos();
+            Level level = context.getLevel();
+            Player player = context.getPlayer();
+            InteractionHand hand= context.getHand();
 
-        CompoundTag blockStateTag = stack.getOrCreateTagElement("BlockStateTag");
-        blockStateTag.putInt("variant", variant);
+            if (player != null) {
+                ItemUtil.releaseButterfly(level, player, hand, position);
+            }
+        }
+
+        return result;
     }
 }
