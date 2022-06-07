@@ -4,11 +4,14 @@ import com.bokmcdok.cat.lists.ItemList;
 import com.bokmcdok.cat.objects.entities.living.PeacemakerButterfly;
 import com.bokmcdok.cat.objects.items.BottledButterflyItem;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -68,8 +71,36 @@ public class EntityEventListener {
      * @param event Information for the event.
      */
     private void onJoinWorldEvent(EntityJoinWorldEvent event) {
-        if (event.getEntity().getType() == mEntityType) {
+        Entity entity = event.getEntity();
+        if (entity.getType() == mEntityType) {
             onJoinWorld(event);
+        }
+
+        if (event.loadedFromDisk()) {
+            return;
+        }
+
+        Level level = event.getWorld();
+        if (!level.isClientSide()) {
+            EntityType<?> type = entity.getType();
+            if (type == EntityType.PILLAGER ||
+                type == EntityType.EVOKER ||
+                type == EntityType.ILLUSIONER ||
+                type == EntityType.VINDICATOR) {
+                AbstractIllager illager = (AbstractIllager) entity;
+                if (illager.getRandom().nextInt(100) < 17) {
+                    PeacemakerButterfly.possess((ServerLevel) level, illager);
+                    event.setCanceled(true);
+                }
+            }
+
+            if (type == EntityType.VILLAGER) {
+                Villager villager = (Villager) entity;
+                if (villager.getRandom().nextInt(1000) < 17) {
+                    PeacemakerButterfly.possess((ServerLevel) level, villager);
+                    event.setCanceled(true);
+                }
+            }
         }
     }
 
@@ -89,7 +120,6 @@ public class EntityEventListener {
      * @param event The drop event to cancel
      */
     private void onLivingDropsEvent(LivingDropsEvent event) {
-        //
         if (event.getSource().getEntity() instanceof PeacemakerButterfly) {
             if (event.getEntity() instanceof Villager ||
                 event.getEntity() instanceof AbstractIllager) {

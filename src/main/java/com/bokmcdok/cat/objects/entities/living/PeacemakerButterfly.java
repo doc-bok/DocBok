@@ -12,7 +12,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -39,9 +38,7 @@ import net.minecraft.world.entity.monster.Vindicator;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
@@ -71,11 +68,12 @@ public class PeacemakerButterfly extends Monster {
     /**
      * Defines the spawn rules for peacemaker butterflies: they generally spawn
      * underground or in mountain caves
+     *
      * @param entityType The entity type to spawn.
-     * @param level The current level.
-     * @param spawnType The type of spawn.
-     * @param position The position to spawn in.
-     * @param rng The random number generator.
+     * @param level      The current level.
+     * @param spawnType  The type of spawn.
+     * @param position   The position to spawn in.
+     * @param rng        The random number generator.
      * @return True if the butterfly can spawn.
      */
     @SuppressWarnings("deprecation")
@@ -103,6 +101,7 @@ public class PeacemakerButterfly extends Monster {
 
     /**
      * Create attributes for a butterfly.
+     *
      * @return Butterflies have only 3 health (1.5 hearts).
      */
     public static AttributeSupplier.Builder createAttributes() {
@@ -110,6 +109,70 @@ public class PeacemakerButterfly extends Monster {
                 .add(Attributes.MAX_HEALTH, 6.0D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
                 .add(Attributes.FLYING_SPEED, 0.9D);
+    }
+
+    /**
+     * Convert an illager to one with a butterfly host
+     * @param level   The current level
+     * @param illager The illager to convert
+     */
+    public static void possess(ServerLevel level,
+                               AbstractIllager illager) {
+        Difficulty difficulty = level.getDifficulty();
+        if (difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD) {
+            if (difficulty != Difficulty.HARD && illager.getRandom().nextBoolean()) {
+                return;
+            }
+
+            if (illager instanceof Evoker) {
+                possess(level, illager, EntityList.PEACEMAKER_EVOKER.get());
+            } else if (illager instanceof Illusioner) {
+                possess(level, illager, EntityList.PEACEMAKER_ILLUSIONER.get());
+            } else if (illager instanceof Pillager) {
+                possess(level, illager, EntityList.PEACEMAKER_PILLAGER.get());
+            } else if (illager instanceof Vindicator) {
+                possess(level, illager, EntityList.PEACEMAKER_VINDICATOR.get());
+            }
+        }
+    }
+
+    /**
+     * Convert a villager to one with a butterfly host
+     * @param level The current level
+     * @param villager The villager to convert
+     */
+    public static void possess(ServerLevel level,
+                               Villager villager) {
+        Difficulty difficulty = level.getDifficulty();
+        if (difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD) {
+            if (difficulty != Difficulty.HARD && villager.getRandom().nextBoolean()) {
+                return;
+            }
+
+            if (ForgeEventFactory.canLivingConvert(villager, EntityList.PEACEMAKER_VILLAGER.get(), (x) -> {
+            })) {
+                PeacemakerVillager peacemakerVillager = villager.convertTo(EntityList.PEACEMAKER_VILLAGER.get(), false);
+                if (peacemakerVillager != null) {
+                    peacemakerVillager.setVillagerData(villager.getVillagerData());
+                    peacemakerVillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE).getValue());
+                    peacemakerVillager.setOffers(villager.getOffers());
+                    peacemakerVillager.setVillagerXp(villager.getVillagerXp());
+                    peacemakerVillager.finalizeSpawn(level,
+                            level.getCurrentDifficultyAt(peacemakerVillager.blockPosition()),
+                            MobSpawnType.CONVERSION,
+                            null,
+                            null);
+
+                    peacemakerVillager.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+
+                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(villager, peacemakerVillager);
+
+                    if (!peacemakerVillager.isSilent()) {
+                        level.levelEvent(null, 1026, peacemakerVillager.blockPosition(), 0);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -166,62 +229,20 @@ public class PeacemakerButterfly extends Monster {
     public void killed(@NotNull ServerLevel level,
                        @NotNull LivingEntity victim) {
         super.killed(level, victim);
-        Difficulty difficulty = level.getDifficulty();
-        if (difficulty == Difficulty.NORMAL || difficulty == Difficulty.HARD) {
-            if (difficulty != Difficulty.HARD && this.random.nextBoolean()) {
-                return;
+
+        if (victim instanceof Villager villager) {
+            possess(level, villager);
+            if (!this.isSilent()) {
+                level.levelEvent(null, 1027, this.blockPosition(), 0);
             }
 
-            if (victim instanceof Villager villager &&
-                    ForgeEventFactory.canLivingConvert(victim, EntityList.PEACEMAKER_VILLAGER.get(), (x) -> {})) {
-                PeacemakerVillager peacemakerVillager = villager.convertTo(EntityList.PEACEMAKER_VILLAGER.get(), false);
-                if (peacemakerVillager != null) {
-                    for (EquipmentSlot equipmentslot : EquipmentSlot.values()) {
-                        ItemStack itemstack = villager.getItemBySlot(equipmentslot);
-                        if (!itemstack.isEmpty()) {
-                            if (EnchantmentHelper.hasBindingCurse(itemstack)) {
-                                peacemakerVillager.getSlot(equipmentslot.getIndex() + 300).set(itemstack);
-                            } else {
-                                double d0 = this.getEquipmentDropChance(equipmentslot);
-                                if (d0 > 1.0D) {
-                                    villager.spawnAtLocation(itemstack);
-                                }
-                            }
-                        }
-                    }
+            this.remove(RemovalReason.DISCARDED);
+        }
 
-                    peacemakerVillager.setVillagerData(villager.getVillagerData());
-                    peacemakerVillager.setGossips(villager.getGossips().store(NbtOps.INSTANCE).getValue());
-                    peacemakerVillager.setOffers(villager.getOffers());
-                    peacemakerVillager.setVillagerXp(villager.getVillagerXp());
-                    peacemakerVillager.finalizeSpawn(level,
-                            level.getCurrentDifficultyAt(peacemakerVillager.blockPosition()),
-                            MobSpawnType.CONVERSION,
-                            null,
-                            null);
+        if (victim instanceof AbstractIllager illager) {
+            possess(level, illager);
 
-                    peacemakerVillager.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
-                    if (!this.isSilent()) {
-                        level.levelEvent(null, 1027, peacemakerVillager.blockPosition(), 0);
-                    }
-
-                    net.minecraftforge.event.ForgeEventFactory.onLivingConvert(villager, peacemakerVillager);
-
-                    this.remove(RemovalReason.DISCARDED);
-                }
-            }
-
-            if (victim instanceof AbstractIllager illager) {
-                if (illager instanceof Evoker) {
-                    convertTo(level, illager, EntityList.PEACEMAKER_EVOKER.get());
-                } else if (illager instanceof Illusioner) {
-                    convertTo(level, illager, EntityList.PEACEMAKER_ILLUSIONER.get());
-                } else if (illager instanceof Pillager) {
-                    convertTo(level, illager, EntityList.PEACEMAKER_PILLAGER.get());
-                } else if (illager instanceof Vindicator){
-                    convertTo(level, illager, EntityList.PEACEMAKER_VINDICATOR.get());
-                }
-            }
+            this.remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -285,16 +306,17 @@ public class PeacemakerButterfly extends Monster {
     }
 
     /**
-     * Convert the entity to one with a butterfly host
-     * @param level The current level
+     * Convert an illager to one with a butterfly host
+     * @param level   The current level
      * @param illager The illager to convert
-     * @param type The entity type
-     * @param <T> The entity class
+     * @param type    The entity type
+     * @param <T>     The entity class
      */
-    private <T extends Mob> void convertTo(ServerLevel level,
-                                           AbstractIllager illager,
-                                           EntityType<T> type) {
-        if (ForgeEventFactory.canLivingConvert(illager, type, (x) -> {})) {
+    private static <T extends Mob> void possess(ServerLevel level,
+                                                AbstractIllager illager,
+                                                EntityType<T> type) {
+        if (ForgeEventFactory.canLivingConvert(illager, type, (x) -> {
+        })) {
             T newMob = illager.convertTo(type, false);
             if (newMob != null) {
                 newMob.finalizeSpawn(level,
@@ -303,11 +325,10 @@ public class PeacemakerButterfly extends Monster {
                         null,
                         null);
                 net.minecraftforge.event.ForgeEventFactory.onLivingConvert(illager, newMob);
-                if (!this.isSilent()) {
-                    level.levelEvent(null, 1026, this.blockPosition(), 0);
-                }
 
-                this.remove(RemovalReason.DISCARDED);
+                if (!newMob.isSilent()) {
+                    level.levelEvent(null, 1026, newMob.blockPosition(), 0);
+                }
             }
         }
     }
