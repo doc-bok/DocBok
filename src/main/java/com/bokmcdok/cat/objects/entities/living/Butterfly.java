@@ -135,8 +135,8 @@ public class Butterfly extends AmbientCreature {
                                         @Nullable SpawnGroupData groupData,
                                         @Nullable CompoundTag tag) {
         setVariant(this.random.nextInt(ButterflyRenderer.TEXTURE.length));
-        if (getVariant() == 10) {
-            setVariant(this.random.nextInt(7));
+        if (getVariant() == 9) {
+            setVariant(6);
         }
 
         return super.finalizeSpawn(level, difficulty, spawnType, groupData, tag);
